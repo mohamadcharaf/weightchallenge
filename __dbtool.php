@@ -2,12 +2,8 @@
 
 require_once( 'dbconfig.php' );
 $db = new Database();
-$conn = $db->dbConnection();
+$conn = $db->dbConnection();  // This will die if it fails.
 
-// Check connection
-if( $conn->connect_error ){
-    die( 'Connection failed: ' . $conn->connect_error );
-}
 echo '<br>Connected successfully';
 
 
