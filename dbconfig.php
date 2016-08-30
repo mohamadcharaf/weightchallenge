@@ -18,9 +18,11 @@ else{
   define( 'DB_PASS', '1huOBjL5' );
 
   define( 'DB_NAME', 'eap-app-mysql' );
+/*
 //  define( 'DB_SOCK', getenv( 'OPENSHIFT_MYSQL_DB_SOCKET' ) );
 //  define( 'DB_URL', getenv( 'OPENSHIFT_MYSQL_DB_URL' ) );
 }
+*/
 
 
 class Database{
