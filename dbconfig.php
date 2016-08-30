@@ -12,8 +12,9 @@ if( getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) ){
 }
 else{
 //  define( 'DB_HOST', 'localhost' );
-//  define( 'DB_PORT', '3306' );
 */
+  define( 'DB_HOST', '127.0.0.1' );
+  define( 'DB_PORT', '3306' );
   define( 'DB_USER', 'userx4C' );
   define( 'DB_PASS', '1huOBjL5' );
 
@@ -37,7 +38,7 @@ class Database{
     $this->conn = null;
     try{
 //      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
-      $this->conn = new PDO( "mysql:dbname={$this->db_name}", $this->username, $this->password );
+      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
       $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     }
     catch( Exception $exception ){
