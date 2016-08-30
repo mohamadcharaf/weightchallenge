@@ -12,8 +12,8 @@ if ($conn->connect_error) {
 }
 echo "<br>Connected successfully";
 
+/*
 echo "<br>Trying to create table";
-
 $sql = "CREATE TABLE IF NOT EXISTS `users` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_name` varchar(15) NOT NULL,
@@ -25,6 +25,6 @@ $sql = "CREATE TABLE IF NOT EXISTS `users` (
 $stmt = conn->prepare( $sql );
 $stmt->execute();
 echo "<br>Table created";
-
+*/
 
 ?>
