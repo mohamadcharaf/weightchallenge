@@ -1,17 +1,23 @@
 <?php
+define( 'DB_USER', getenv( 'OPENSHIFT_MYSQL_DB_USERNAME' ) );
+define( 'DB_PASS', getenv( 'OPENSHIFT_MYSQL_DB_PASSWORD' ) );
+define( 'DB_HOST', getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) );
+define( 'DB_NAME', getenv( 'OPENSHIFT_GEAR_NAME' ) );
+define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
+
 class Database{
-  private $username = 'userx4C';
-  private $password = '1huOBjL5';
-//  private $host = 'localhost';
-  private $host = '127.0.0.1';
-  private $db_name = 'eap-app-mysql';
-  private $port = '3306';
+  private $username = DB_USER;
+  private $password = DB_PASS;
+  private $host = DB_HOST;
+  private $db_name = DB_NAME;
+  private $port = DB_PORT;
   public $conn;
 
   public function dbConnection(){
     $this->conn = null;
     try{
       $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
+//      $this->conn = new PDO( "mysql:port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
       $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     }
     catch( Exception $exception ){
