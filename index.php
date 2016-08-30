@@ -1,3 +1,4 @@
 <?php
-echo 'Hello World. Edited';
+echo 'Hello World';
+phpinfo();
 ?>
