@@ -2,7 +2,8 @@
 class Database{
   private $username = 'userx4C';
   private $password = '1huOBjL5';
-  private $host = 'localhost';
+//  private $host = 'localhost';
+  private $host = '127.0.0.1';
   private $db_name = 'eap-app-mysql';
   private $port = '3306';
   public $conn;
