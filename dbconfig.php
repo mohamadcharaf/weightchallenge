@@ -1,4 +1,5 @@
 <?php
+/*
 if( getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) ){
   define( 'DB_HOST', getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) );
   define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
@@ -12,6 +13,7 @@ if( getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) ){
 else{
 //  define( 'DB_HOST', 'localhost' );
 //  define( 'DB_PORT', '3306' );
+*/
   define( 'DB_USER', 'userx4C' );
   define( 'DB_PASS', '1huOBjL5' );
 
@@ -24,9 +26,9 @@ else{
 class Database{
   private $username = DB_USER;
   private $password = DB_PASS;
-  private $host = DB_HOST;
+//  private $host = DB_HOST;
   private $db_name = DB_NAME;
-  private $port = DB_PORT;
+//  private $port = DB_PORT;
   public $conn;
 
   public function dbConnection(){

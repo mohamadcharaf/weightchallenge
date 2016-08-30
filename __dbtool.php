@@ -22,6 +22,7 @@ echo '<br>Table created';
 */
 
 echo '<br>Describe table';
+echo '<br>';
 $sql = 'DESCRIBE users';
 $stmt = $conn->prepare( $sql );
 $stmt->execute();
