@@ -1,14 +1,5 @@
 <?php
 
-/*
-$servername = "eap-app-mysql";
-$username = "userx4C";
-$password = "1huOBjL5";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password);
-*/
-
 require_once( 'dbconfig.php' );
 $db = new Database();
 $conn = $db->dbConnection();
@@ -35,5 +26,13 @@ $stmt = conn->prepare( $sql );
 $stmt->execute();
 echo '<br>Table created';
 */
+
+echo '<br>Describe table';
+$sql = 'DESCRIBE users';
+$stmt = conn->prepare( $sql );
+$stmt->execute();
+
+$result = $stmt->fetch( PDO::FETCH_ASSOC );
+print_r( $result );
 
 ?>
