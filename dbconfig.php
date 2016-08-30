@@ -19,6 +19,7 @@ class Database{
     }
     catch( Exception $exception ){
       echo "Connection error: " . $exception->getMessage();
+      die;
     }
 
     return $this->conn;
