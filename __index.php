@@ -1,6 +1,11 @@
 <?php
-define( 'DB_HOST', getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) );
-define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
+//define( 'DB_HOST', getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) );
+//define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
+
+define( 'DB_HOST', getenv( 'EAP_APP_MYSQL_SERVICE_HOST' ) );
+define( 'DB_PORT', getenv( 'MYSQL_SERVICE_PORT' ) );
+
+
 define( 'DB_USER', getenv( 'OPENSHIFT_MYSQL_DB_USERNAME' ) );
 define( 'DB_PASS', getenv( 'OPENSHIFT_MYSQL_DB_PASSWORD' ) );
 define( 'DB_SOCK', getenv( 'OPENSHIFT_MYSQL_DB_SOCKET' ) );
