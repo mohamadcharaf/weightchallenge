@@ -32,7 +32,8 @@ class Database{
   public function dbConnection(){
     $this->conn = null;
     try{
-      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
+//      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
+      $this->conn = new PDO( "mysql:dbname={$this->db_name}", $this->username, $this->password );
       $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     }
     catch( Exception $exception ){
