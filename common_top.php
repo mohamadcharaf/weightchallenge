@@ -17,20 +17,11 @@ $user = new USER();
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="http://www.codingcage.com">Coding Cage</a>
-    </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="http://www.codingcage.com/2015/11/ajax-login-script-with-jquery-php-mysql.html">Back to Article</a></li>
-        <li><a href="http://www.codingcage.com/search/label/jQuery">jQuery</a></li>
-        <li><a href="http://www.codingcage.com/search/label/PHP">PHP</a></li>
+        <li><a href="home.php"><span class="glyphicon glyphicon-home"></span> home</a></li>
+        <li><a href="profile.php"><span class="glyphicon glyphicon-user"></span> profile</a></li>
+
       </ul>
       <ul class="nav navbar-nav navbar-right">
 <?php
@@ -38,7 +29,7 @@ if( $user->is_loggedin() ){
 ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span>&nbsp;Hi' <?php echo $userRow['user_email']; ?>&nbsp;<span class="caret"></span>
+            <span class="glyphicon glyphicon-user"></span>&nbsp;Welcome <?php echo $userRow['user_email']; ?>&nbsp;<span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;View Profile</a></li>
@@ -59,18 +50,12 @@ if( $user->is_loggedin() ){
 <?php
 if( $user->is_loggedin() ){
 ?>
-      <label class="h5">welcome : <?php print($userRow['user_name']); ?></label>
-      <hr />
-      <h1>
-        <a href="home.php"><span class="glyphicon glyphicon-home"></span> home</a> &nbsp;
-        <a href="profile.php"><span class="glyphicon glyphicon-user"></span> profile</a>
-      </h1>
-      <hr />
+<p>Common content for when you ARE logged in</p>
 <?php
 }
 else{
 ?>
-<p>Content for when you are not logged in</p>
+<p>Common content for when you are NOT logged in</p>
 <?php
 }
 ?>
