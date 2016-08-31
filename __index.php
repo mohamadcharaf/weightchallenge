@@ -1,6 +1,7 @@
 <?php
 define( 'DB_HOST', getenv( 'OPENSHIFT_MYSQL_DB_HOST' ) );
-define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
+//define( 'DB_PORT', getenv( 'OPENSHIFT_MYSQL_DB_PORT' ) );
+define( 'DB_PORT', getenv( 'DB_PORT' ) );
 
 //define( 'DB_HOST', getenv( 'EAP_APP_MYSQL_SERVICE_HOST' ) );
 //define( 'DB_PORT', getenv( 'MYSQL_SERVICE_PORT' ) );
