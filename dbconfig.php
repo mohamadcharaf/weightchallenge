@@ -4,8 +4,7 @@
 class Database{
   private $username = 'userx4C';
   private $password = '1huOBjL5';
-//  private $host = 'localhost';
-  private $host = 'weight-challenge-mysql-weight-challenge.0ec9.hackathon.openshiftapps.com'
+  private $host = 'weight-challenge-mysql-weight-challenge.0ec9.hackathon.openshiftapps.com';
   private $db_name = 'eap-app-mysql';
   private $port = '3306';
   public $conn;
