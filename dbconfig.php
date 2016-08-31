@@ -18,12 +18,14 @@ class Database{
   public function dbConnection(){
     $this->conn = null;
     try{
-//      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
-//      $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+      $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
+      $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+/* MySQLi
       $this->conn = new mysqli($this->host, $this->username, $this->password);
       if( ! mysqli_select_db( $this->conn, $this->db_name ) ){
         throw new Exception( 'Cannot select DB' );
       }
+*/
     }
     catch( Exception $exception ){
       echo 'Connection error: ' . $exception->getMessage();
