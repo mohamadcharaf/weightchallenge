@@ -1,7 +1,10 @@
 <?php
-$servername = "eap-app-mysql";
-$username = "userx4C";
-$password = "1huOBjL5";
+//$servername = "eap-app-mysql";
+//$username = "userx4C";
+//$password = "1huOBjL5";
+$servername = "mysql";
+$username = "weightchallenge";
+$password = "weightchallenge";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password);
