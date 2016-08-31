@@ -11,7 +11,7 @@ define( 'DB_PASS', getenv( 'OPENSHIFT_MYSQL_DB_PASSWORD' ) );
 define( 'DB_SOCK', getenv( 'OPENSHIFT_MYSQL_DB_SOCKET' ) );
 define( 'DB_URL', getenv( 'OPENSHIFT_MYSQL_DB_URL' ) );
 
-echo '<br>Hello World X';
+echo '<br>Hello World';
 echo '<br>DB_HOST: ' . DB_HOST;
 echo '<br>DB_PORT: ' . DB_PORT;
 echo '<br>DB_USER: ' . DB_USER;
