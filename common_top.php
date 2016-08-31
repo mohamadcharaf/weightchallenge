@@ -24,6 +24,8 @@ if( $user->is_loggedin() ){
 ?>
         <li><a href="home.php"><span class="glyphicon glyphicon-home"></span> home</a></li>
         <li><a href="profile.php"><span class="glyphicon glyphicon-user"></span> profile</a></li>
+        <li><a href="history.php"><span class="glyphicon glyphicon-user"></span> history</a></li>
+        <li><a href="challenge.php"><span class="glyphicon glyphicon-user"></span> challenge</a></li>
 <?php
 }
 ?>
