@@ -3,23 +3,19 @@ session_start();
 require_once( 'user.php' );
 $login = new USER();
 
-if($login->is_loggedin()!="")
-{
-  $login->redirect('home.php');
+if( $login->is_loggedin() != "" ){
+  $login->redirect( 'home.php' );
 }
 
-if(isset($_POST['btn-login']))
-{
+if( isset( $_POST['btn-login'] ) ){
   $uname = strip_tags($_POST['txt_uname_email']);
   $umail = strip_tags($_POST['txt_uname_email']);
   $upass = strip_tags($_POST['txt_password']);
 
-  if($login->doLogin($uname,$umail,$upass))
-  {
-    $login->redirect('home.php');
+  if( $login->doLogin( $uname, $umail, $upass ) ){
+    $login->redirect( 'home.php' );
   }
-  else
-  {
+  else{
     $error = "Wrong Details !";
   }
 }
@@ -31,13 +27,11 @@ require_once( 'common_top.php' );
     <hr />
 <?php
 if( isset( $error ) ){
-  foreach( $error as $error ){
 ?>
     <div class="alert alert-danger">
       <i class="glyphicon glyphicon-warning-sign"></i> &nbsp; <?php echo $error; ?> !
     </div>
 <?php
-  }
 }
 ?>
 

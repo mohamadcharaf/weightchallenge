@@ -19,9 +19,14 @@ $user = new USER();
   <div class="container">
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
+<?php
+if( $user->is_loggedin() ){
+?>
         <li><a href="home.php"><span class="glyphicon glyphicon-home"></span> home</a></li>
         <li><a href="profile.php"><span class="glyphicon glyphicon-user"></span> profile</a></li>
-
+<?php
+}
+?>
       </ul>
       <ul class="nav navbar-nav navbar-right">
 <?php
@@ -29,7 +34,7 @@ if( $user->is_loggedin() ){
 ?>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span class="glyphicon glyphicon-user"></span>&nbsp;Welcome <?php echo $userRow['user_email']; ?>&nbsp;<span class="caret"></span>
+            <span class="glyphicon glyphicon-user"></span>&nbsp;Welcome <?php echo $user->uname; ?>&nbsp;<span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
             <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;View Profile</a></li>
