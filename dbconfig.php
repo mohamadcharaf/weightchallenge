@@ -11,7 +11,7 @@ class Database{
   private $username = 'openshifty';
   private $password = 'oneseventwelve22';
   private $host = 'imadethis.freitag.theinscrutable.us';
-  private $db_name = 'maker';
+  private $db_name = 'openshifty';
   private $port = '3306';
   public $conn;
 
