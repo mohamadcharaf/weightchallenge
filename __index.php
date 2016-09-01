@@ -7,8 +7,8 @@ echo '<br>Hello World';
 
 echo '<br>DB_NAME: ' . DB_NAME;
 echo '<br>DB_USER: ' . DB_USER;
-echo '<br>DB_PASS: ' . DB_PASS;
-//echo '<br>DB_PASS: ' . 'No, not going to show you the pw';
+//echo '<br>DB_PASS: ' . DB_PASS;
+echo '<br>DB_PASS: ' . 'No, not going to show you the pw';
 
 phpinfo();
 
