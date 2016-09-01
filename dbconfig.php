@@ -1,6 +1,6 @@
 <?php
 class Database{
-  private $servername = 'mysql';
+  private $dbname = 'mysql';
   private $username = 'weightchallenge';
   private $password = 'weightchallenge';
 
@@ -9,7 +9,8 @@ class Database{
   public function dbConnection(){
     $this->conn = null;
     try{
-      $this->conn = new PDO( "mysql:server={$this->servername}", $this->username, $this->password );
+      $this->conn = new PDO( "mysql:dbname={$this->dbname}", $this->username, $this->password );
+
       $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     }
     catch( Exception $exception ){
