@@ -58,14 +58,29 @@ INSERT INTO challenges(challenge_id, fk_created_by, challenge_name, start_date, 
 CREATE TABLE challenge_participant
 (
   fk_challenge_id INT(10) NOT NULL
-, fk_user_id INT(10) NOT NULL
-, goal_weight INT(10) NOT NULL
+ ,fk_user_id INT(10) NOT NULL
+ ,start_date DATETIME NOT NULL COMMENT 'copy this data value when challenge is joined'
+ ,end_date DATETIME NOT NULL COMMENT 'copy this data value when challenge is joined'
+ ,challenge_type INT(10) NOT NULL DEFAULT 1 COMMENT 'copy this data value when challenge is joined'
+ ,start_weight INT(10) NULL
+ ,goal_weight INT(10) NOT NULL
+ ,rank INT(10) NULL
+ ,team_size INT(10) NOT NULL  COMMENT 'update this every time a team member joins'
 ,CONSTRAINT FOREIGN KEY (fk_challenge_id) REFERENCES challenges(challenge_id)
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES users(user_id)
 ) ENGINE=InnoDB;
-INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, goal_weight) VALUES( 1, 1, 250 );
-INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, goal_weight) VALUES( 1, 2, 250 );
-INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, goal_weight) VALUES( 1, 3, 250 );
+
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 1, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 2, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 3, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
+
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 1, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 2, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 3, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
+
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 1, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 2, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
+INSERT INTO challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 3, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
 
 */
 

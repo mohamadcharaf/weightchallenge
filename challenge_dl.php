@@ -21,7 +21,7 @@ if( $challenge_id == -1 ){
 }
 else{
 ?>
-<br>You opened this page with arguments (<?php echo $challenge_id; ?>) so it will show you the challenge for that date.
+<br>You opened this page with argumetns so it will show you the challenge for that date.
 <?php
 }
 ?>

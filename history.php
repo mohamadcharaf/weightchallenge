@@ -14,16 +14,24 @@ $( document ).ready( function(){
     ,ajax:            'history_dl.php'
     ,displayLength:   25
     ,info:            true
-    ,searching:       true
-//    ,searchDelay:     2000
+    ,searching:       false
     ,ordering:        false
     ,scrollY:         '200px'
     ,paging:          true
+    ,columnDefs:      [{
+       targets:  [ 0 ]
+      ,visible: false
+     }]
   });
 
+  $( '#challenge_table tr' ).css( 'cursor', 'pointer' );
+  $( '#challenge_table tbody' ).on( 'click', 'tr', function (){
+    var data = dt.row( this ).data();
+    window.location = 'challenge.php?challenge_id=' + data[0];
+  });
 });
 </script>
-<p class="h4">History Page</p>
+<p class='h4'>History Page</p>
 <hr>
 <br>This will show your old (completed) challenges
 <br>Clicking on an old one will take you to the Challenge Detail page.
@@ -36,6 +44,7 @@ $( document ).ready( function(){
   <table id='challenge_table' class='display' cellspacing='0' width='100%'>
     <thead>
       <tr>
+        <th>challenge_id</th>
         <th>Start Date</th>
         <th>End Date</th>
         <th>Start Weight</th>
