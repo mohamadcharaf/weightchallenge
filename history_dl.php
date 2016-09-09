@@ -17,8 +17,8 @@ if( $uid == '' ){
 }
 
 $draw = (isset($_REQUEST['draw'])) ? htmlspecialchars($_REQUEST['draw']) : 1;
-$start = (isset($_REQUEST['start'])) ? htmlspecialchars($_REQUEST['start']) : 0;
-$length = (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['length']) : 10;
+$start = (isset($_REQUEST['start'])) ? intval( htmlspecialchars( $_REQUEST['start'] ) ) : 0;
+$length = (isset($_REQUEST['length'])) ? intval( htmlspecialchars( $_REQUEST['length'] ) ) : 10;
 //if( $length == -1 ){ $length = count( $foo_json['data'] ); }
 //$search = (isset($_REQUEST['search'])) ? $_REQUEST['search'] : null;
 
