@@ -17,13 +17,14 @@ define( 'DB_PORT', getenv( 'DB_PORT' ) );
 //$password = "weightchallenge";
 
 
-$servername = DB_NAME;
+$servername = DB_HOST;
+$db = DB_NAME;
 $username = DB_USER;
 $password = DB_PASS;
 
 
 // Create connection
-$conn = new mysqli( $servername, $username, $password );
+$conn = new mysqli( $db, $username, $password );
 
 // Check connection
 if( $conn->connect_error ){
