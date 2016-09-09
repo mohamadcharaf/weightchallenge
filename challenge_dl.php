@@ -6,6 +6,7 @@ if( $trusted !== 'OK' ){
 // Since this is "trusted" and challenge.php has already included common_top.php there is a $user variable.
 
 $sql_string = null;
+$uid = (int) ( $user->getUID() );
 
 if( $challenge_id == -1 ){
   $sql_string = '
@@ -15,7 +16,7 @@ if( $challenge_id == -1 ){
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ':uid', $user->getUID(), PDO::PARAM_INT );
+  $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
 }
 else{
   $sql_string = '
@@ -25,7 +26,7 @@ else{
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ':uid', $user->getUID(), PDO::PARAM_INT );
+  $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
   $stmt->bindParam( ':challenge_id', $challenge_id );
 }
 
