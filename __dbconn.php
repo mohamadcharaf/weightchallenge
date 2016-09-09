@@ -6,25 +6,23 @@ define( 'DB_HOST', getenv( 'DB_HOST' ) );
 define( 'DB_PORT', getenv( 'DB_PORT' ) );
 
 
-
+/**
 // Try connection with mysqli
-
-//$servername = "eap-app-mysql";
-//$username = "userx4C";
-//$password = "1huOBjL5";
-//$servername = "mysql";
-//$username = "weightchallenge";
-//$password = "weightchallenge";
-
-
 $servername = DB_HOST;
-$db = DB_NAME;
+$dbname = DB_NAME;
 $username = DB_USER;
 $password = DB_PASS;
+**/
 
+//$dbname = "eap-app-mysql";
+//$username = "userx4C";
+//$password = "1huOBjL5";
+$dbname = "mysql";
+$username = "weightchallenge";
+$password = "weightchallenge";
 
 // Create connection
-$conn = new mysqli( $db, $username, $password );
+$conn = new mysqli( $dbname, $username, $password );
 
 // Check connection
 if( $conn->connect_error ){
