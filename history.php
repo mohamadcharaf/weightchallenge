@@ -4,7 +4,7 @@ require_once( 'common_top.php' );
 ?>
 <script>
 $( document ).ready( function(){
-  var dt = $( '#challenge_table' ).on( 'processing.dt'
+  var dt = $( '#table1' ).on( 'processing.dt'
              ,function( e, settings, processing ){
               $( '#processingIndicator' ).css( 'display', processing ? 'block' : 'none' );
              }).DataTable({
@@ -24,8 +24,8 @@ $( document ).ready( function(){
      }]
   });
 
-  $( '#challenge_table tr' ).css( 'cursor', 'pointer' );
-  $( '#challenge_table tbody' ).on( 'click', 'tr', function (){
+  $( '#table1 tr' ).css( 'cursor', 'pointer' );
+  $( '#table1 tbody' ).on( 'click', 'tr', function (){
     var data = dt.row( this ).data();
     window.location = 'challenge.php?challenge_id=' + data[0];
   });
@@ -41,7 +41,7 @@ $( document ).ready( function(){
   </div>
   Challenge History
 
-  <table id='challenge_table' class='display' cellspacing='0' width='100%'>
+  <table id='table1' class='display' cellspacing='0' width='100%'>
     <thead>
       <tr>
         <th>challenge_id</th>
