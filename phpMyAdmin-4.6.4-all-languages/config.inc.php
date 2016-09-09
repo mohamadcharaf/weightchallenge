@@ -29,7 +29,7 @@ $i++;
 $cfg['Servers'][$i]['user']          = 'weightchallenge';
 $cfg['Servers'][$i]['password']      = 'weightchallenge'; // use here your password
 $cfg['Servers'][$i]['auth_type']     = 'config';
-
+$cfg['Servers'][$i]['host'] = 'mysql';
 $cfg['Servers'][$i]['controlhost'] = 'mysql';
 /**
  * phpMyAdmin configuration storage settings.
