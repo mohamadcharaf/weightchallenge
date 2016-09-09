@@ -49,7 +49,7 @@ SELECT :uid, dt, NULL
                       FROM user_weigh_in
            WHERE fk_user_id = :uid) AND NOW()';
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindparam( ":uid", $uid );
+$stmt->bindParam( ":uid", $uid );
 $stmt->execute();
 
 // Get total count
@@ -58,7 +58,7 @@ SELECT COUNT(*)
   FROM user_weigh_in
  WHERE fk_user_id = :uid';
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindparam( ":uid", $uid );
+$stmt->bindParam( ":uid", $uid );
 $stmt->execute();
 $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
@@ -70,7 +70,7 @@ SELECT COUNT(*)
   FROM user_weigh_in
  WHERE fk_user_id = :uid';
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindparam( ":uid", $uid );
+$stmt->bindParam( ":uid", $uid );
 $stmt->execute();
 $filterCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
  **/
@@ -85,9 +85,9 @@ $sql_string = '
  LIMIT :start, :length';
 
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindparam( ":uid", $uid );
-$stmt->bindparam( ":start", intval($start), PDO::PARAM_INT );   // Paging support
-$stmt->bindparam( ":length", intval($length), PDO::PARAM_INT ); // Paging support
+$stmt->bindParam( ":uid", $uid );
+$stmt->bindParam( ":start", intval($start), PDO::PARAM_INT );   // Paging support
+$stmt->bindParam( ":length", intval($length), PDO::PARAM_INT ); // Paging support
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );

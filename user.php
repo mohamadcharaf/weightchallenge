@@ -36,9 +36,9 @@ $this->uid = $this->session;
 
       $stmt = $this->conn->prepare( "INSERT INTO users(user_name,user_email,user_pass) VALUES(:uname, :umail, :upass)" );
 
-      $stmt->bindparam( ":uname", $uname );
-      $stmt->bindparam( ":umail", $umail );
-      $stmt->bindparam( ":upass", $new_password);
+      $stmt->bindParam( ":uname", $uname );
+      $stmt->bindParam( ":umail", $umail );
+      $stmt->bindParam( ":upass", $new_password);
 
       $stmt->execute();
 
@@ -52,15 +52,25 @@ $this->uid = $this->session;
 
   public function doLogin( $uname, $umail, $upass ){
     try{
-      $stmt = $this->conn->prepare( "SELECT user_id, user_name, user_email, user_pass FROM users WHERE user_name=:uname OR user_email=:umail " );
-      $stmt->execute(array(':uname'=>$uname, ':umail'=>$umail));
-      $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
+      $stmt = $this->conn->prepare( "SELECT user_id, user_name, user_email, user_pass FROM users WHERE user_name = :uname OR user_email = :umail" );
+
+      $stmt->bindParam( ':uname', $uname );
+      $stmt->bindParam( ':umail', $umail );
+      $stmt->execute();
+
+      $userRow = $stmt->fetch(PDO::FETCH_ASSOC);
       if( $stmt->rowCount() == 1 ){
         if( password_verify( $upass, $userRow[ 'user_pass' ] ) ){
             $this->uname = $uname;
-// QQQ OK, stop using the user_id as the user_session so that the value changes from time to time in the cookie
-            $_SESSION[ 'user_session' ] = $userRow['user_id'];
+            $user_session = substr( MD5( microtime() ), 0, 128);
+            $_SESSION[ 'user_session' ] = $user_session;
             $_SESSION[ 'user_name' ] = $uname;
+
+            $stmt = $this->conn->prepare( "UPDATE users SET sessionid = :user_session WHERE user_name = :uname" );
+            $stmt->bindParam( ':user_session', $user_session );
+            $stmt->bindParam( ':uname', $uname );
+            $stmt->execute();
+
             return true;
         }
       }
@@ -83,8 +93,8 @@ $this->uid = $this->session;
   public function hasSession( $uname, $user_session ){
     try{
       $stmt = $this->conn->prepare( "SELECT count(*) FROM users WHERE sessionid = :user_session AND user_name = :uname" );
-      $stmt->bindparam( ":user_session", $user_session );
-      $stmt->bindparam( ":uname", $uname );
+      $stmt->bindParam( ":user_session", $user_session );
+      $stmt->bindParam( ":uname", $uname );
       $stmt->execute();
 
       if( $stmt->fetchColumn() == 1 ){
