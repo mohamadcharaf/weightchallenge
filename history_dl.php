@@ -61,11 +61,11 @@ $sql_string = '
  LIMIT :start, :length';
 
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ':uid', $uid );
+$stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
 //$stmt->bindParam( ':start', intval($start), PDO::PARAM_INT );   // Paging support
 //$stmt->bindParam( ':length', intval($length), PDO::PARAM_INT ); // Paging support
-$stmt->bindParam( ':start', $start );   // Paging support
-$stmt->bindParam( ':length', $length ); // Paging support
+$stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
+$stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );
