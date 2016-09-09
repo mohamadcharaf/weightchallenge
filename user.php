@@ -3,8 +3,9 @@ require_once( 'dbconfig.php' );
 
 class USER{
   private $conn;
-  public  $uname;
-  public  $uid;
+  private $uname;
+  private $session;
+  private $uid;
 
   public function __construct( $uname = null, $session = null ){
     $database = new Database();
@@ -13,22 +14,36 @@ class USER{
     if( $uname == null && $session == null && $this->is_loggedin() ){
       $this->uname = $_SESSION[ 'user_name' ];
       $this->session = $_SESSION[ 'user_session' ];
-//      $this->hasSession( $this->uname, $this->session );  // go get the user_id
-//QQQ work around
-$this->uid = $this->session;
+      $this->hasSession( $this->uname, $this->session );  // go get the user_id
     }
     else if( $uname != null && $session != null && $this->hasSession( $uname, $session ) ){
       $this->uname = $uname;
       $this->session = $session;
     }
+//    else{
+//      throw new Exception( 'No user' );
+//    }
   }
 
-/* this is not needed and even if it was, should be in the database class.
+  public function getName(){
+    return $this->uname;
+  }
+
+  public function getSession(){
+    return $this->session;
+  }
+
+  // Do NOT display this to user or store in cookie.
+  // Use ONLY in _dl code to help locate data in tables.
+  public function getUID(){
+    return $this->uid;
+  }
+
+  // Only used in sign-up and challenge_dl page.  Consider (re)moving it.
   public function runQuery( $sql ){
     $stmt = $this->conn->prepare( $sql );
     return $stmt;
   }
-*/
 
   public function register( $uname, $umail, $upass ){
     try{
@@ -89,17 +104,17 @@ $this->uid = $this->session;
 
 
   // For any given user name and session ID this tests for validity. (Can be used in back end calls too)
-//QQQ requires session_id in the user table!!
   public function hasSession( $uname, $user_session ){
     try{
-      $stmt = $this->conn->prepare( "SELECT count(*) FROM users WHERE sessionid = :user_session AND user_name = :uname" );
-      $stmt->bindParam( ":user_session", $user_session );
-      $stmt->bindParam( ":uname", $uname );
+      $stmt = $this->conn->prepare( 'SELECT count(*) FROM users WHERE sessionid = :user_session AND user_name = :uname' );
+      $stmt->bindParam( ':user_session', $user_session );
+      $stmt->bindParam( ':uname', $uname );
       $stmt->execute();
 
       if( $stmt->fetchColumn() == 1 ){
-        $stmt2 = $this->conn->prepare( "SELECT user_id FROM users WHERE sessionid = ? AND user_name = ?" );
-        $stmt2->bind_param( 'ss', $user_session, $uname );
+        $stmt2 = $this->conn->prepare( 'SELECT user_id FROM users WHERE sessionid = :user_session AND user_name = :uname' );
+        $stmt2->bindParam( ':user_session', $user_session );
+        $stmt2->bindParam( ':uname', $uname );
         $stmt2->execute();
         $this->uid = $stmt2->fetchColumn( 0 );
         // one row, one column in results.  Value should be 0 or 1.
