@@ -11,7 +11,7 @@ $( document ).ready( function(){
      processing:      true
     ,dom:             '<"toolbar">frtip'
     ,serverSide:      true
-    ,ajax:            'history_dl.php'
+    ,ajax:            'history_dl.php?user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
     ,displayLength:   25
     ,info:            true
     ,searching:       false
@@ -27,7 +27,9 @@ $( document ).ready( function(){
   $( '#table1 tr' ).css( 'cursor', 'pointer' );
   $( '#table1 tbody' ).on( 'click', 'tr', function (){
     var data = dt.row( this ).data();
-    window.location = 'challenge.php?challenge_id=' + data[0];
+//    window.location = 'challenge.php?challenge_id=' + data[0];
+// Yes, this is a screwy way to do it.  And it looks odd in the URL.  But whatever, it's fun.
+    $.post( 'challenge.php', {'challenge_id': data[0]} ).done( function(data){ document.write( data ); });
   });
 });
 </script>
