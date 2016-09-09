@@ -10,23 +10,23 @@ $sql_string = null;
 if( $challenge_id == -1 ){
   $sql_string = '
   SELECT fk_challenge_id, DATE(start_date), DATE(end_date) , start_weight, goal_weight, rank, team_size
-    FROM challenge_participant
-   WHERE end_date = (SELECT MAX(end_date) FROM challenge_participant WHERE fk_user_id = :uid )
+    FROM wc__challenge_participant
+   WHERE end_date = (SELECT MAX(end_date) FROM wc__challenge_participant WHERE fk_user_id = :uid )
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ":uid", $user->getUID() );
+  $stmt->bindParam( ':uid', $user->getUID() );
 }
 else{
   $sql_string = '
   SELECT fk_challenge_id, DATE(start_date), DATE(end_date) , start_weight, goal_weight, rank, team_size
-    FROM challenge_participant
+    FROM wc__challenge_participant
    WHERE fk_challenge_id = :challenge_id
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ":uid", $user->getUID() );
-  $stmt->bindParam( ":challenge_id", $challenge_id );
+  $stmt->bindParam( ':uid', $user->getUID() );
+  $stmt->bindParam( ':challenge_id', $challenge_id );
 }
 
 $stmt->execute();
