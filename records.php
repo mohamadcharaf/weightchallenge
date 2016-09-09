@@ -11,7 +11,7 @@ $( document ).ready( function(){
      processing:      true
     ,dom:             '<"toolbar">frtip'
     ,serverSide:      true
-    ,ajax:            'records_dl.php'
+    ,ajax:            'records_dl.php?user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
     ,displayLength:   400
     ,info:            true
     ,searching:       false
