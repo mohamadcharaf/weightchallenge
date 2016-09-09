@@ -35,7 +35,7 @@ $conn = new mysqli( $dbname, $username, $password );
 if( $conn->connect_error ){
   die( "MySQLi Connection failed: " . $conn->connect_error );
 }
-echo "MySQLi Connected successfully.";
+echo "MySQLi Connected successfully!";
 
 /**
 // Try connection with PDO
