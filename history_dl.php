@@ -29,7 +29,7 @@ $pdo = $database->dbConnection();
 // Get total count
 $sql_string =  '
 SELECT COUNT(*)
-  FROM challenge_participant
+  FROM wc__challenge_participant
  WHERE fk_user_id = :uid';
 $stmt = $pdo->prepare( $sql_string );
 $stmt->bindParam( ":uid", $uid );
@@ -41,7 +41,7 @@ $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 /**
 $sql_string =  '
 SELECT COUNT(*)
-  FROM challenge_participant
+  FROM wc__challenge_participant
  WHERE fk_user_id = :uid
    AND .....';
 $stmt = $pdo->prepare( $sql_string );
@@ -55,15 +55,15 @@ $filterCount = $totalCount;
 // Get the actual data for display
 $sql_string = '
    SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
-     FROM challenge_participant
+     FROM wc__challenge_participant
     WHERE fk_user_id = :uid
  ORDER BY start_date DESC
  LIMIT :start, :length';
 
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ":uid", $uid );
-$stmt->bindParam( ":start", intval($start), PDO::PARAM_INT );   // Paging support
-$stmt->bindParam( ":length", intval($length), PDO::PARAM_INT ); // Paging support
+$stmt->bindParam( ':uid', $uid );
+$stmt->bindParam( ':start', intval($start), PDO::PARAM_INT );   // Paging support
+$stmt->bindParam( ':length', intval($length), PDO::PARAM_INT ); // Paging support
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );

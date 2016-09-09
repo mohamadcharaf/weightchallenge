@@ -1,7 +1,7 @@
 <?php
 
 ?>
-        <p class="blockquote-reverse" style="margin-top:200px;">
+        <p class='blockquote-reverse' style='margin-top:200px;'>
           This is the RedHat OpenShift Weight Challenge Hackathon App
           <br />
           <br />
@@ -10,6 +10,6 @@
       </div>
     </div>
   </div>
-  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script type='text/javascript' src='bootstrap/js/bootstrap.min.js'></script>
 </body>
 </html>

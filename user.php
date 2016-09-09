@@ -49,11 +49,11 @@ class USER{
     try{
       $new_password = password_hash( $upass, PASSWORD_DEFAULT );
 
-      $stmt = $this->conn->prepare( "INSERT INTO users(user_name,user_email,user_pass) VALUES(:uname, :umail, :upass)" );
+      $stmt = $this->conn->prepare( 'INSERT INTO wc__users(user_name,user_email,user_pass) VALUES( :uname, :umail, :upass )' );
 
-      $stmt->bindParam( ":uname", $uname );
-      $stmt->bindParam( ":umail", $umail );
-      $stmt->bindParam( ":upass", $new_password);
+      $stmt->bindParam( ':uname', $uname );
+      $stmt->bindParam( ':umail', $umail );
+      $stmt->bindParam( ':upass', $new_password);
 
       $stmt->execute();
 
@@ -67,7 +67,7 @@ class USER{
 
   public function doLogin( $uname, $umail, $upass ){
     try{
-      $stmt = $this->conn->prepare( "SELECT user_id, user_name, user_email, user_pass FROM users WHERE user_name = :uname OR user_email = :umail" );
+      $stmt = $this->conn->prepare( 'SELECT user_id, user_name, user_email, user_pass FROM wc__users WHERE user_name = :uname OR user_email = :umail' );
 
       $stmt->bindParam( ':uname', $uname );
       $stmt->bindParam( ':umail', $umail );
@@ -81,7 +81,7 @@ class USER{
             $_SESSION[ 'user_session' ] = $user_session;
             $_SESSION[ 'user_name' ] = $uname;
 
-            $stmt = $this->conn->prepare( "UPDATE users SET sessionid = :user_session WHERE user_name = :uname" );
+            $stmt = $this->conn->prepare( 'UPDATE wc__users SET sessionid = :user_session WHERE user_name = :uname' );
             $stmt->bindParam( ':user_session', $user_session );
             $stmt->bindParam( ':uname', $uname );
             $stmt->execute();
@@ -106,13 +106,13 @@ class USER{
   // For any given user name and session ID this tests for validity. (Can be used in back end calls too)
   public function hasSession( $uname, $user_session ){
     try{
-      $stmt = $this->conn->prepare( 'SELECT count(*) FROM users WHERE sessionid = :user_session AND user_name = :uname' );
+      $stmt = $this->conn->prepare( 'SELECT count(*) FROM wc__users WHERE sessionid = :user_session AND user_name = :uname' );
       $stmt->bindParam( ':user_session', $user_session );
       $stmt->bindParam( ':uname', $uname );
       $stmt->execute();
 
       if( $stmt->fetchColumn() == 1 ){
-        $stmt2 = $this->conn->prepare( 'SELECT user_id FROM users WHERE sessionid = :user_session AND user_name = :uname' );
+        $stmt2 = $this->conn->prepare( 'SELECT user_id FROM wc__users WHERE sessionid = :user_session AND user_name = :uname' );
         $stmt2->bindParam( ':user_session', $user_session );
         $stmt2->bindParam( ':uname', $uname );
         $stmt2->execute();

@@ -23,7 +23,7 @@ $( document ).ready( function(){
 $.fn.dataTable.ext.errMode = 'throw';
 
 /*
-  $( "#table1" ).dataTable({
+  $( '#table1' ).dataTable({
     fnRowCallback: function( nRow, aData, iDisplayIndex, iDisplayIndexFull ){
       if( $(nRow).find( 'td:eq(1)' ).text() == 'missing' ){
         $(nRow).find('td:eq(3)').addClass( 'color' );
