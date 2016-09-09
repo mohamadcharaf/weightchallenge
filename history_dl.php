@@ -64,8 +64,10 @@ $stmt = $pdo->prepare( $sql_string );
 $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
 //$stmt->bindParam( ':start', intval($start), PDO::PARAM_INT );   // Paging support
 //$stmt->bindParam( ':length', intval($length), PDO::PARAM_INT ); // Paging support
-$stmt->bindParam( ':start', 0 );   // Paging support
-$stmt->bindParam( ':length', 25 ); // Paging support
+$foo = 0;
+$bar = 25;
+$stmt->bindParam( ':start', $foo );   // Paging support
+$stmt->bindParam( ':length', $bar ); // Paging support
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );
