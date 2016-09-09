@@ -19,10 +19,7 @@ if( $uid == '' ){
 $draw = (int) ( (isset($_REQUEST['draw'])) ? htmlspecialchars($_REQUEST['draw']) : 1 );
 $start = (int) ( (isset($_REQUEST['start'])) ? htmlspecialchars($_REQUEST['start']) : 0 );
 $length = (int) ( (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['length']) : 10 );
-//if( $length == -1 ){ $length = count( $foo_json['data'] ); }
-//$search = (isset($_REQUEST['search'])) ? $_REQUEST['search'] : null;
 
-// Bandaid to keep things moving
 $database = new Database();
 $pdo = $database->dbConnection();
 
@@ -45,7 +42,7 @@ SELECT COUNT(*)
  WHERE fk_user_id = :uid
    AND .....';
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ":uid", $uid );
+$stmt->bindParam( ':uid', $uid );
 ... filter rules here ...
 $stmt->execute();
 $filterCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
@@ -61,7 +58,7 @@ $sql_string = '
  LIMIT :start, :length';
 
 $stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
+$stmt->bindParam( ':uid', $uid );
 $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
 $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
 $stmt->execute();
