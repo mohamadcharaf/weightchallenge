@@ -1,29 +1,36 @@
 <?php
-if( ! $trusted === 'OK' ){
+if( $trusted !== 'OK' ){
   // This should be "called" as a direct include as part of challenge.php - otherwise bail
   return;
 }
+// Since this is "trusted" and challenge.php has already included common_top.php there is a $user variable.
 
-// Bandaid to keep things moving
-$database = new Database();
-$pdo = $database->dbConnection();
+$sql_string = null;
 
+if( $challenge_id == -1 ){
+  $sql_string = '
+  SELECT fk_challenge_id, DATE(start_date), DATE(end_date) , start_weight, goal_weight, rank, team_size
+    FROM challenge_participant
+   WHERE end_date = (SELECT MAX(end_date) FROM challenge_participant WHERE fk_user_id = :uid )
+     AND fk_user_id = :uid';
 
-$sql_string = '
-SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
-  FROM challenge_participant
- WHERE fk_challenge_id = :challenge_id
-   AND fk_user_id = :uid';
-$stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ":uid", $user_id );
-$stmt->bindParam( ":challenge_id", $challenge_id );
+  $stmt = $user->runQuery( $sql_string );
+  $stmt->bindParam( ":uid", $user->getUID() );
+}
+else{
+  $sql_string = '
+  SELECT fk_challenge_id, DATE(start_date), DATE(end_date) , start_weight, goal_weight, rank, team_size
+    FROM challenge_participant
+   WHERE fk_challenge_id = :challenge_id
+     AND fk_user_id = :uid';
+
+  $stmt = $user->runQuery( $sql_string );
+  $stmt->bindParam( ":uid", $user->getUID() );
+  $stmt->bindParam( ":challenge_id", $challenge_id );
+}
+
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );
-
-echo '{';
-echo json_encode( $allData );
-echo '}';
-
 
 ?>
