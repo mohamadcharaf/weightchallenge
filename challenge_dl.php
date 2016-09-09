@@ -1,31 +1,29 @@
 <?php
-require_once( 'session.php' );
-require_once( 'common_top.php' );
-
-$challenge_id = (isset($_GET['challenge_id'])) ? htmlspecialchars( $_GET['challenge_id'] ) : -1;
-
-
-// Before using this variable make sure that this user is allowed to see it!
-
-?>
-<p class="h4">Challenge Detail</p>
-<hr>
-<br>This will show you the progress on your challenge
-<br>It can also show details on old challenges.
-
-<?php
-if( $challenge_id == -1 ){
-?>
-<br>You opened this page with no arguments so it will show you the present challenge. Or give a message that you are not participating in any challenges.
-<?php
+if( ! $trusted === 'OK' ){
+  // This should be "called" as a direct include as part of challenge.php - otherwise bail
+  return;
 }
-else{
-?>
-<br>You opened this page with argumetns so it will show you the challenge for that date.
-<?php
-}
-?>
 
-<?php
-require_once( 'common_bottom.php' );
+// Bandaid to keep things moving
+$database = new Database();
+$pdo = $database->dbConnection();
+
+
+$sql_string = '
+SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
+  FROM challenge_participant
+ WHERE fk_challenge_id = :challenge_id
+   AND fk_user_id = :uid';
+$stmt = $pdo->prepare( $sql_string );
+$stmt->bindparam( ":uid", $user_id );
+$stmt->bindparam( ":challenge_id", $challenge_id );
+$stmt->execute();
+
+$allData = $stmt->fetchAll( PDO::FETCH_NUM );
+
+echo '{';
+echo json_encode( $allData );
+echo '}';
+
+
 ?>
