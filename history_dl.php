@@ -1,6 +1,4 @@
 <?php
-// Needs a security token to verify call is from session
-// This is the data layer behind the history UI
 require( 'dbconfig.php' );
 require( 'user.php' );
 

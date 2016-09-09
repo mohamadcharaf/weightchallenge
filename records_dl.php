@@ -1,7 +1,6 @@
 <?php
-// Needs a security token to verify call is from session and for present user
-// This is the data layer behind the records UI
 require( 'dbconfig.php' );
+require( 'user.php' );
 
 $uname = (isset($_REQUEST['user'])) ? $_REQUEST['user'] : null;         // Set uname to chosen user name (or null if not chosen)
 $session = (isset($_REQUEST['session'])) ? $_REQUEST['session'] : null; // Set session to chosen session id (or null if not chosen)
