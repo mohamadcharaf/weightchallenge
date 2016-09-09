@@ -8,17 +8,12 @@ define( 'DB_PASS', getenv( 'DB_PASSWORD' ) );
 
 /**
 // Try connection with mysqli
-$servername = DB_HOST;
-$dbname = DB_NAME;
-$username = DB_USER;
-$password = DB_PASS;
-**/
 
 //$servername = "eap-app-mysql";
 //$username = "userx4C";
 //$password = "1huOBjL5";
 
-/** This data is known good **/
+// This data is known good
 //$servername = "mysql";
 //$username = "weightchallenge";
 //$password = "weightchallenge";
@@ -26,7 +21,6 @@ $password = DB_PASS;
 $servername = DB_HOST;
 $username = DB_USER;
 $password = DB_PASS;
-
 
 // Create connection
 $conn = new mysqli( $servername, $username, $password );
@@ -36,8 +30,8 @@ if( $conn->connect_error ){
   die( "MySQLi Connection failed: " . $conn->connect_error );
 }
 echo "MySQLi Connected successfully!";
+**/
 
-/**
 // Try connection with PDO
 class Database{
   private $host = DB_HOST;
@@ -67,6 +61,5 @@ class Database{
 
 $db = new Database();
 $db->dbConnection();
-**/
 
 ?>
