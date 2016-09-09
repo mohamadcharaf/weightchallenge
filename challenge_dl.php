@@ -15,7 +15,7 @@ if( $challenge_id == -1 ){
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ':uid', $user->getUID() );
+  $stmt->bindParam( ':uid', $user->getUID(), PDO::PARAM_INT );
 }
 else{
   $sql_string = '
@@ -25,7 +25,7 @@ else{
      AND fk_user_id = :uid';
 
   $stmt = $user->runQuery( $sql_string );
-  $stmt->bindParam( ':uid', $user->getUID() );
+  $stmt->bindParam( ':uid', $user->getUID(), PDO::PARAM_INT );
   $stmt->bindParam( ':challenge_id', $challenge_id );
 }
 
