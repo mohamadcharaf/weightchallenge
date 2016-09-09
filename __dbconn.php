@@ -14,22 +14,22 @@ $username = DB_USER;
 $password = DB_PASS;
 **/
 
-//$dbname = "eap-app-mysql";
+//$servername = "eap-app-mysql";
 //$username = "userx4C";
 //$password = "1huOBjL5";
 
 /** This data is known good **/
-//$dbname = "mysql";
+//$servername = "mysql";
 //$username = "weightchallenge";
 //$password = "weightchallenge";
 
-$dbname = DB_NAME;
+$servername = DB_HOST;
 $username = DB_USER;
 $password = DB_PASS;
 
 
 // Create connection
-$conn = new mysqli( $dbname, $username, $password );
+$conn = new mysqli( $servername, $username, $password );
 
 // Check connection
 if( $conn->connect_error ){
