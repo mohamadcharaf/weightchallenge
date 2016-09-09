@@ -1,6 +1,18 @@
 <?php
 require_once( 'user.php' );
 $user = new USER();
+
+function isToday( $time ){
+    return( strtotime( $time ) === strtotime( 'today' ) );
+}
+
+function isPast( $time ){
+    return( strtotime( $time ) < time() );
+}
+
+function isFuture( $time ){
+    return( strtotime( $time ) > time() );
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,8 +27,8 @@ $user = new USER();
 
 <!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css'> -->
 <!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-theme.min.css'> -->
-<!--  <link rel='stylesheet' type='text/css' media='screen' href='style.css'> -->
 
+  <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/datepicker3.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-table.css' />
@@ -45,7 +57,7 @@ if( $user->is_loggedin() ){
 ?>
         <li class='dropdown'>
           <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
-            <span class='glyphicon glyphicon-user'></span>&nbsp;Welcome <?php echo $user->uname; ?>&nbsp;<span class='caret'></span>
+            <span class='glyphicon glyphicon-user'></span>&nbsp;Welcome <?php echo $user->getName(); ?>&nbsp;<span class='caret'></span>
           </a>
           <ul class='dropdown-menu'>
             <li><a href='profile.php'><span class='glyphicon glyphicon-cog'></span>&nbsp;View Profile</a></li>
