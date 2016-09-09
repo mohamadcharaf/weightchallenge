@@ -1,23 +1,22 @@
 <?php
-class Database{
-/*
-  private $dbname = 'mysql';
-  private $username = 'weightchallenge';
-  private $password = 'weightchallenge';
-*/
-  private $username = 'openshifty';
-  private $password = 'oneseventwelve22';
-  private $host = 'imadethis.freitag.theinscrutable.us';
-  private $db_name = 'openshifty';
-  private $port = '3306';
+define( 'DB_HOST', getenv( 'DB_HOST' ) );
+define( 'DB_PORT', getenv( 'DB_PORT' ) );
+define( 'DB_NAME', getenv( 'DB_NAME' ) );
+define( 'DB_USER', getenv( 'DB_USER' ) );
+define( 'DB_PASS', getenv( 'DB_PASSWORD' ) );
 
+class Database{
+  private $host = DB_HOST;
+  private $port = DB_PORT;
+  private $db_name = DB_NAME;
+  private $username = DB_USER;
+  private $password = DB_PASS;
   public $conn;
 
   public function dbConnection(){
     $this->conn = null;
     try{
       $this->conn = new PDO( "mysql:host={$this->host};port={$this->port};dbname={$this->db_name}", $this->username, $this->password );
-//      $this->conn = new PDO( "mysql:host=localhost;dbname={$this->dbname}", $this->username, $this->password );
 
       $this->conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
     }
