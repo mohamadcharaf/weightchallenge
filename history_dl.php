@@ -16,9 +16,9 @@ if( $uid == '' ){
   return;
 }
 
-$draw = (isset($_REQUEST['draw'])) ? htmlspecialchars($_REQUEST['draw']) : 1;
-$start = (isset($_REQUEST['start'])) ? htmlspecialchars($_REQUEST['start']) : 0;
-$length = (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['length']) : 10;
+$draw = (int) (isset($_REQUEST['draw'])) ? htmlspecialchars($_REQUEST['draw']) : 1;
+$start = (int) (isset($_REQUEST['start'])) ? htmlspecialchars($_REQUEST['start']) : 0;
+$length = (int) (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['length']) : 10;
 //if( $length == -1 ){ $length = count( $foo_json['data'] ); }
 //$search = (isset($_REQUEST['search'])) ? $_REQUEST['search'] : null;
 
@@ -64,8 +64,8 @@ $stmt = $pdo->prepare( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 //$stmt->bindParam( ':start', intval($start), PDO::PARAM_INT );   // Paging support
 //$stmt->bindParam( ':length', intval($length), PDO::PARAM_INT ); // Paging support
-$stmt->bindParam( ':start', (int) $start );   // Paging support
-$stmt->bindParam( ':length', (int) $length ); // Paging support
+$stmt->bindParam( ':start', $start );   // Paging support
+$stmt->bindParam( ':length', $length ); // Paging support
 $stmt->execute();
 
 $allData = $stmt->fetchAll( PDO::FETCH_NUM );
