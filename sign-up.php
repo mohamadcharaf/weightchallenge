@@ -55,7 +55,7 @@ require_once( 'common_top.php' );
 
 <div class='signin-form'>
   <form method='post' class='form-signin'>
-    <h2 class='form-signin-heading'>Sign up.</h2>
+    <h2 class='form-signin-heading'>Sign up</h2>
     <hr />
 <?php
 if( isset( $error ) ){
@@ -87,12 +87,12 @@ else if( isset( $_GET['joined'] ) ){
     <div class='clearfix'></div>
     <hr />
     <div class='form-group'>
-      <button type='submit' class='btn btn-primary' name="btn-signup">
-        <i class='glyphicon glyphicon-open-file'></i>&nbsp;SIGN UP
+      <button type='submit' name='btn-signup' class='btn btn-default'>
+        <i class='glyphicon glyphicon-check'></i>&nbsp;SIGN UP
       </button>
     </div>
     <br />
-    <label>have an account ! <a href='index.php'>Sign In</a></label>
+    <label>Have an account? <a href='index.php'>Sign In</a></label>
   </form>
 </div>
 

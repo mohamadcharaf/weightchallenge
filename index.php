@@ -16,14 +16,14 @@ if( isset( $_POST['btn-login'] ) ){
     $login->redirect( 'home.php' );
   }
   else{
-    $error = "Wrong Details !";
+    $error = 'Wrong Details !';
   }
 }
 require_once( 'common_top.php' );
 ?>
 <div class='signin-form'>
   <form class='form-signin' method='post' id='login-form'>
-    <h2 class='form-signin-heading'>Log In to WebApp.</h2>
+    <h2 class='form-signin-heading'>Log In to WebApp</h2>
     <hr />
 <?php
 if( isset( $error ) ){
@@ -48,11 +48,11 @@ if( isset( $error ) ){
 
     <div class='form-group'>
       <button type='submit' name='btn-login' class='btn btn-default'>
-        <i class='glyphicon glyphicon-log-in'></i> &nbsp; SIGN IN
+        <i class='glyphicon glyphicon-log-in'></i>&nbsp;SIGN IN
       </button>
     </div>
     <br />
-    <label>Don&#39;t have account yet ! <a href='sign-up.php'>Sign Up</a></label>
+    <label>Don&#39;t have account yet? <a href='sign-up.php'>Sign Up</a></label>
   </form>
 </div>
 
