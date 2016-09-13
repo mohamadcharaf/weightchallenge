@@ -25,6 +25,7 @@ function isFuture( $time ){
   <script type='text/javascript' src='jquery.dataTables.min.js'></script>
   <link rel='stylesheet' type='text/css' href='jquery.dataTables.min.css' >
   <script type='text/javascript' src='jquery.webticker.min.js'></script>
+  <link rel='stylesheet' type='text/css' href='webticker.css' >
 
 <!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css'> -->
 <!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-theme.min.css'> -->
@@ -72,8 +73,8 @@ if( $user->is_loggedin() ){
 //QQQ Leave notifications showing in UI until they are acknowledged
 //QQQ In some timer driven ajax script once every 5 minutes rebuild the notificaiton list.
 ?>
-<div id='notification_area'>
-  <ul id='notification_ticker'>
+<div id='notification_area' class='tickercontainer'>
+  <ul id='notification_ticker' class='newsticker'>
     <li data-update='item1'>Common content for when you ARE logged in</p></li>
     <li data-update='item2'>You've been invited to participate in a challenge</li>
     <li data-update='item3'>Your weight check in is N days overdue!</li>
@@ -83,8 +84,19 @@ if( $user->is_loggedin() ){
 
 <script type='text/javascript'>
 $( document ).ready( function(){
-debugger;
-  jQuery( '#notification_ticker' ).webTicker()
+//  jQuery( '#notification_ticker' ).webTicker();
+  $( '#notification_ticker' ).webTicker({
+      speed:         50       // pixels per second
+      ,direction:    'left'   // if to move left or right
+      ,moving:       true     // weather to start the ticker in a moving or static position
+      ,startEmpty:   true     // weather to start with an empty or pre-filled ticker
+      ,duplicate:    false    // if there is less items then visible on the ticker you can duplicate the items to make it continuous
+      ,rssurl:       false    // only set if you want to get data from rss
+      ,rssfrequency: 0        // the frequency of updates in minutes. 0 means do not refresh
+      ,updatetype:   'reset'  // how the update would occur options are "reset" or "swap"
+  });
+
+
 });
 </script>
 <?php
