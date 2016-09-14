@@ -21,54 +21,96 @@ $length = (int) ( (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['len
 $database = new Database();
 $pdo = $database->dbConnection();
 
-// Get total count
-$sql_string =  '
-SELECT COUNT(*)
-  FROM wc__challenge_participant
- WHERE fk_user_id = :uid';
-$stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ':uid', $uid );
-$stmt->execute();
-$totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
+$action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : null;  // Determine why this was called
+if( $action === 'creation' ){
+  // Get total count
+  $sql_string =  '
+  SELECT COUNT(*)
+    FROM wc__challenges
+   WHERE fk_created_by = :uid';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->execute();
+  $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
+  // Get filtered count
+  $filterCount = $totalCount;
 
-// Get filtered count
-/**
-$sql_string =  '
-SELECT COUNT(*)
-  FROM wc__challenge_participant
- WHERE fk_user_id = :uid
-   AND .....';
-$stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ':uid', $uid );
-... filter rules here ...
-$stmt->execute();
-$filterCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
- **/
-$filterCount = $totalCount;
+  // Get the actual data for display
+  $sql_string = '
+     SELECT challenge_id, challenge_name, start_date, end_date, "Weight loss" AS challenge_type
+       FROM wc__challenges
+      WHERE fk_created_by = :uid
+   ORDER BY start_date DESC
+   LIMIT :start, :length';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
+  $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
+  $stmt->execute();
 
-// Get the actual data for display
-$sql_string = '
-   SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
-     FROM wc__challenge_participant
-    WHERE fk_user_id = :uid
- ORDER BY start_date DESC
- LIMIT :start, :length';
+  $allData = $stmt->fetchAll( PDO::FETCH_NUM );
 
-$stmt = $pdo->prepare( $sql_string );
-$stmt->bindParam( ':uid', $uid );
-$stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
-$stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
-$stmt->execute();
+  echo '{';
+  echo '"draw": ' . $draw;
+  echo ',"recordsTotal": ' . $totalCount;
+  echo ',"recordsFiltered": ' . $filterCount;
+  echo ',"data": ' . json_encode( $allData );
+  echo '}';
+}
+else if( $action === 'participation'){
 
-$allData = $stmt->fetchAll( PDO::FETCH_NUM );
+  // Get total count
+  $sql_string =  '
+  SELECT COUNT(*)
+    FROM wc__challenge_participant
+   WHERE fk_user_id = :uid';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->execute();
+  $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
-echo '{';
-echo '"draw": ' . $draw;
-echo ',"recordsTotal": ' . $totalCount;
-echo ',"recordsFiltered": ' . $filterCount;
-echo ',"data": ' . json_encode( $allData );
-echo '}';
+  // Get filtered count
+  /**
+  $sql_string =  '
+  SELECT COUNT(*)
+    FROM wc__challenge_participant
+   WHERE fk_user_id = :uid
+     AND .....';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  ... filter rules here ...
+  $stmt->execute();
+  $filterCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
+   **/
+  $filterCount = $totalCount;
+
+  // Get the actual data for display
+  $sql_string = '
+     SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
+       FROM wc__challenge_participant
+      WHERE fk_user_id = :uid
+   ORDER BY start_date DESC
+   LIMIT :start, :length';
+
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
+  $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
+  $stmt->execute();
+
+  $allData = $stmt->fetchAll( PDO::FETCH_NUM );
+
+  echo '{';
+  echo '"draw": ' . $draw;
+  echo ',"recordsTotal": ' . $totalCount;
+  echo ',"recordsFiltered": ' . $filterCount;
+  echo ',"data": ' . json_encode( $allData );
+  echo '}';
+}
+else{
+  // Bad value for $action.  Ignore request.
+}
 
 return;
 ?>
