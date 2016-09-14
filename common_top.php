@@ -23,21 +23,37 @@ function isFuture( $time ){
 <head>
   <title>Weight Challenge</title>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-  <script type='text/javascript' src='jquery-3.1.0.min.js'></script>
+  <script type='text/javascript' charset='utf-8' src='jquery-3.1.0.min.js'></script>
+  <link rel='stylesheet' type='text/css' media='screen' href='style.css'> <!-- Styling that came with the login template -->
 
-  <script type='text/javascript' src='jquery.dataTables.min.js'></script>
+  <script type='text/javascript' charset='utf-8' src='jquery.dataTables.min.js'></script>
   <link rel='stylesheet' type='text/css' href='jquery.dataTables.min.css' >
-  <script type='text/javascript' src='jquery.webticker.min.js'></script>
+  <script type='text/javascript' charset='utf-8' src='jquery.webticker.min.js'></script>
   <link rel='stylesheet' type='text/css' href='webticker.css' >
 
-<!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css'> -->
+  <script type='text/javascript' src='jquery-ui.min.js'></script> <!-- jQuery UI datepicker stuff (and much more) -->
+  <link rel='stylesheet' type='text/css' media='screen' href='jquery-ui.min.css'>
+<!--  <link rel='stylesheet' type='text/css' media='screen' href='jquery-ui.structure.min.css'> -->
+
 <!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-theme.min.css'> -->
 
-  <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+
+  <script type='text/javascript' charset='utf-8' src='bootstrap/js/bootstrap.min.js'></script>
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css' />
-  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/datepicker3.css' />
+
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-table.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/styles.css' />
+
+<!-- Does not seem to do anything -->
+<!-- <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/datepicker3.css' /> -->
+
+<style>
+.ui-datepicker{
+  background-color: #F1F4F7;
+  border: 1px solid;
+  /* border-radius: 10px; */
+}
+</style>
 
 </head>
 <body>

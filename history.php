@@ -34,13 +34,11 @@ $( document ).ready( function(){
       ,visible: false
      }]
   });
-  $( '#table0 tr' ).css( 'cursor', 'pointer' );
+  $( '#table0 tr' ).css( 'cursor', 'pointer' ); // This is not working.  Manually forced style on table
   $( '#table0 tbody' ).on( 'click', 'tr', function (){
     var data = dt0.row( this ).data();
     util.post( 'invite.php', {'challenge_id': data[0]} );
   });
-
-
 
   var dt1 = $( '#table1' ).DataTable({
      processing:      true
@@ -59,7 +57,7 @@ $( document ).ready( function(){
      }]
   });
 
-  $( '#table1 tr' ).css( 'cursor', 'pointer' );
+  $( '#table1 tr' ).css( 'cursor', 'pointer' ); // This is not working.  Manually forced style on table
   $( '#table1 tbody' ).on( 'click', 'tr', function (){
     var data = dt1.row( this ).data();
     util.post( 'challenge.php', {'challenge_id': data[0]} );
@@ -80,7 +78,7 @@ $( document ).ready( function(){
     <i class='glyphicon glyphicon-check'></i>&nbsp;NEW CHALLENGE
   </button>
 
-  <table id='table0' class='display' cellspacing='0' width='100%'>
+  <table id='table0' class='display' cellspacing='0' width='100%' style='cursor: pointer;' >
     <thead>
       <tr>
         <th>challenge_id</th>
@@ -92,11 +90,10 @@ $( document ).ready( function(){
     </thead>
   </table>
 </div>
-<hr>
 
 <div class='history_dt'>
   Challenges in which you've participated (click to view detail)
-  <table id='table1' class='display' cellspacing='0' width='100%'>
+  <table id='table1' class='display' cellspacing='0' width='100%' style='cursor: pointer;' >
     <thead>
       <tr>
         <th>challenge_id</th>

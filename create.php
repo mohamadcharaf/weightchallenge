@@ -66,6 +66,15 @@ else{
 
 <script type='text/javascript'>
 $( document ).ready( function(){
+
+// jQuery UI version
+  $( '.datepicker' ).datepicker({
+     dateFormat: 'yy-mm-dd'
+    ,changeMonth: true
+    ,changeYear: true
+    ,minDate    : '+1d'
+  });
+
   $( '#invite_challenge' ).unbind( 'click' ).click( function(){
     $.post( 'invite.php' ).done( function(data){ document.write( data ); });
   });
@@ -106,11 +115,23 @@ else if( isset( $_GET['created'] ) ){
       <input type='text' class='form-control' name='txt_cname' placeholder='Enter challenge name' value='<?php if(isset($error)){echo $cname;}?>' />
     </div>
     <div class='form-group'>
-      <input type='text' class='form-control' name='txt_start' placeholder='Enter challenge start date' value='<?php if(isset($error)){echo $cstart;}?>' />
+      <div class='input-group'>
+        <input type='text' class='form-control datepicker' name='txt_start' id='txt_start' placeholder='Enter challenge start date' value='<?php if(isset($error)){echo $cstart;}?>' />
+        <div class='input-group-addon'>
+          <span class='glyphicon glyphicon-calendar'></span>
+        </div>
+      </div>
     </div>
+
     <div class='form-group'>
-      <input type='text' class='form-control' name='txt_end' placeholder='Enter challenge end date' value='<?php if(isset($error)){echo $cend;}?>' />
+      <div class='input-group'>
+        <input type='text' class='form-control datepicker' name='txt_end' id='txt_end' placeholder='Enter challenge end date' value='<?php if(isset($error)){echo $cend;}?>' />
+        <div class='input-group-addon'>
+          <span class='glyphicon glyphicon-calendar'></span>
+        </div>
+      </div>
     </div>
+
     <div class='clearfix'></div>
     <hr />
     <div class='form-group'>
