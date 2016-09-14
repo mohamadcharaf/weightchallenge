@@ -80,7 +80,8 @@ CREATE TABLE wc__challenge_participant
  ,start_weight INT(10) NULL
  ,goal_weight INT(10) NOT NULL
  ,rank INT(10) NULL
- ,team_size INT(10) NOT NULL  COMMENT 'update this every time a team member joins'
+ ,team_size INT(10) NOT NULL COMMENT 'update this every time a team member joins'
+ ,status VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Participating, Complete, or Disqualified'
 ,CONSTRAINT FOREIGN KEY (fk_challenge_id) REFERENCES wc__challenges(challenge_id)
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
