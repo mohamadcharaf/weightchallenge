@@ -39,9 +39,13 @@ class USER{
     return $this->uid;
   }
 
-  // Only used in sign-up and challenge_dl page.  Consider (re)moving it.
-  public function runQuery( $sql ){
+  public function prepQuery( $sql ){
     $stmt = $this->conn->prepare( $sql );
+    return $stmt;
+  }
+
+  public function lastInsertId(){
+    $stmt = $this->conn->lastInsertId();
     return $stmt;
   }
 

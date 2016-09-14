@@ -2,7 +2,7 @@
 require_once( 'session.php' );
 require_once( 'common_top.php' );
 ?>
-<script>
+<script type='text/javascript'>
 $( document ).ready( function(){
   var dt = $( '#table1' ).on( 'processing.dt'
              ,function( e, settings, processing ){

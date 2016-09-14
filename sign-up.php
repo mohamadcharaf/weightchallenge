@@ -25,22 +25,24 @@ if( isset( $_POST['btn-signup'] ) ){
     $error[] = 'provide password !';
   }
   else if( strlen( $upass ) < 6 ){
-    $error[] = 'Password must be atleast 6 characters';
+    $error[] = 'Password must be at least 6 characters';
   }
   else{
     try{
-      $stmt = $user->runQuery( 'SELECT user_name, user_email FROM users WHERE user_name = :uname OR user_email = :umail' );
-      $stmt->execute(array(':uname'=>$uname, ':umail'=>$umail));
-      $row=$stmt->fetch(PDO::FETCH_ASSOC);
+      $stmt = $user->prepQuery( 'SELECT user_name, user_email FROM wc__users WHERE user_name = :uname OR user_email = :umail' );
+      $stmt->bindParam( ':uname', $uname );
+      $stmt->bindParam( ':umail', $umail );
+      $stmt->execute();
+      $row=$stmt->fetch( PDO::FETCH_ASSOC );
 
       if( $row['user_name'] == $uname ){
-        $error[] = "sorry username already taken !";
+        $error[] = 'sorry username already taken !';
       }
       else if( $row['user_email'] == $umail ){
-        $error[] = "sorry email id already taken !";
+        $error[] = 'sorry email id already taken !';
       }
       else{
-        if( $user->register( $uname,$umail,$upass ) ) {
+        if( $user->register( $uname, $umail, $upass ) ) {
           $user->redirect( 'sign-up.php?joined' );
         }
       }
@@ -76,13 +78,13 @@ else if( isset( $_GET['joined'] ) ){
 }
 ?>
     <div class='form-group'>
-      <input type='text' class="form-control" name="txt_uname" placeholder="Enter Username" value="<?php if(isset($error)){echo $uname;}?>" />
+      <input type='text' class='form-control' name='txt_uname' placeholder='Enter Username' value='<?php if(isset($error)){echo $uname;}?>' />
     </div>
     <div class='form-group'>
-      <input type='text' class="form-control" name="txt_umail" placeholder="Enter E-Mail ID" value="<?php if(isset($error)){echo $umail;}?>" />
+      <input type='text' class='form-control' name='txt_umail' placeholder='Enter E-Mail ID' value='<?php if(isset($error)){echo $umail;}?>' />
     </div>
     <div class='form-group'>
-      <input type='password' class='form-control' name="txt_upass" placeholder="Enter Password" />
+      <input type='password' class='form-control' name='txt_upass' placeholder='Enter Password' />
     </div>
     <div class='clearfix'></div>
     <hr />

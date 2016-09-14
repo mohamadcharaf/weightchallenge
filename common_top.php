@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 require_once( 'user.php' );
 $user = new USER();
 
@@ -13,12 +15,13 @@ function isPast( $time ){
 function isFuture( $time ){
     return( strtotime( $time ) > time() );
 }
+
 ?>
 
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
-  <title>Hello World</title>
+  <title>Weight Challenge</title>
   <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   <script type='text/javascript' src='jquery-3.1.0.min.js'></script>
 
@@ -46,7 +49,7 @@ if( $user->is_loggedin() ){
     <div id='navbar' class='navbar-collapse collapse'>
       <ul class='nav navbar-nav'>
         <li><a href='home.php'><span class='glyphicon glyphicon-home'></span> Home</a></li>
-        <li><a href='history.php'><span class='glyphicon glyphicon-calendar'></span> Challenge History</a></li>
+        <li><a href='history.php'><span class='glyphicon glyphicon-calendar'></span> Challenges</a></li>
         <li><a href='challenge.php'><span class='glyphicon glyphicon-zoom-in'></span> Challenge Detail</a></li>
         <li><a href='records.php'><span class='glyphicon glyphicon-calendar'></span> Personal Records</a></li>
         <li><a href='about.php'><span class='glyphicon glyphicon-info-sign'></span> About</a></li>

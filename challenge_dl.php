@@ -15,7 +15,7 @@ if( $challenge_id == -1 ){
    WHERE end_date = (SELECT MAX(end_date) FROM wc__challenge_participant WHERE fk_user_id = :uid )
      AND fk_user_id = :uid';
 
-  $stmt = $user->runQuery( $sql_string );
+  $stmt = $user->prepQuery( $sql_string );
   $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
 }
 else{
@@ -25,7 +25,7 @@ else{
    WHERE fk_challenge_id = :challenge_id
      AND fk_user_id = :uid';
 
-  $stmt = $user->runQuery( $sql_string );
+  $stmt = $user->prepQuery( $sql_string );
   $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
   $stmt->bindParam( ':challenge_id', $challenge_id );
 }
