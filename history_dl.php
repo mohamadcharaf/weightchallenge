@@ -87,7 +87,7 @@ else if( $action === 'participation'){
 
   // Get the actual data for display
   $sql_string = '
-     SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size
+     SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size, status
        FROM wc__challenge_participant
       WHERE fk_user_id = :uid
    ORDER BY start_date DESC

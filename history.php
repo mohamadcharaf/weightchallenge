@@ -103,6 +103,7 @@ $( document ).ready( function(){
         <th>Goal Weight</th>
         <th>Rank</th>
         <th>Team Size</th>
+        <th>Status</th>
       </tr>
     </thead>
   </table>
