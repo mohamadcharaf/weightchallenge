@@ -71,23 +71,20 @@ else if( $action === 'participation'){
   $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
   // Get filtered count
-  /**
-  $sql_string =  '
-  SELECT COUNT(*)
-    FROM wc__challenge_participant
-   WHERE fk_user_id = :uid
-     AND .....';
-  $stmt = $pdo->prepare( $sql_string );
-  $stmt->bindParam( ':uid', $uid );
-  ... filter rules here ...
-  $stmt->execute();
-  $filterCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
-   **/
   $filterCount = $totalCount;
 
   // Get the actual data for display
   $sql_string = '
-     SELECT fk_challenge_id, start_date, end_date , start_weight, goal_weight, rank, team_size, status
+     SELECT fk_challenge_id
+           ,start_date
+           ,end_date
+           ,start_weight
+           ,goal_weight
+           ,rank
+           ,team_size
+           ,status
+           ,IF( status = "Invited", "<span class=\'glyphicon glyphicon-thumbs-up\' title=\'Click to accept this challenge\'></span>", "&nbsp;" )
+           ,IF( status = "Invited", "<span class=\'glyphicon glyphicon-thumbs-down\' title=\'Click to decline this challenge\'></span>", "&nbsp;" )
        FROM wc__challenge_participant
       WHERE fk_user_id = :uid
    ORDER BY start_date DESC

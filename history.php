@@ -51,18 +51,49 @@ $( document ).ready( function(){
     ,ordering:        false
     ,scrollY:         '200px'
     ,paging:          true
-    ,columnDefs:      [{
-       targets:  [ 0 ]
-      ,visible: false
-     }]
+    ,columnDefs:      [{ 'targets': [ 0 ]
+                        ,'visible': false
+                       }
+                      ,{ 'targets':     [ 1, 2, 3, 4, 5, 6, 7 ]
+                        ,'createdCell': function( td, cellData, rowData, row, col ){
+                                          $(td).css( { 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ util.post( 'challenge.php', { 'challenge_id': rowData[0] } ); });
+                                        }
+                       }
+
+/*
+                      ,{ 'targets':     [ 3, 4, 5, 6 ]
+                        ,'createdCell': function( td, cellData, rowData, row, col ){
+//                                        $(td).css( { 'text-align': 'right' } ); // These two ( .css() and .addClass() ) are equivalent
+                                          $(td).addClass( 'dt-right' );           // These two ( .css() and .addClass() ) are equivalent
+                                        }
+                       }
+*/
+                      ,{ 'targets':   [ 3, 4, 5, 6 ]
+                        ,'className': 'dt-right' } // This way also aligns the column title right
+                      ,{ 'targets':   [ 7, 8, 9 ]
+                        ,'className': 'dt-center' }
+                      ,{ 'targets':     [ 8 ]
+                        ,'createdCell': function( td, cellData, rowData, row, col ){
+                                          if( rowData[7] == 'Invited' ){
+                                            $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'accepted'); });
+                                          }
+                                         }
+                       }
+                      ,{ 'targets':     [ 9 ]
+                        ,'createdCell': function( td, cellData, rowData, row, col ){
+                                          if( rowData[7] == 'Invited' ){
+                                            $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'declined'); });
+                                          }
+                                        }
+                       }]
   });
 
-  $( '#table1 tr' ).css( 'cursor', 'pointer' ); // This is not working.  Manually forced style on table
-  $( '#table1 tbody' ).on( 'click', 'tr', function (){
+/*
+  $( '#table1 tbody' ).unbind( 'click' ).on( 'click', 'tr', function (){
     var data = dt1.row( this ).data();
     util.post( 'challenge.php', {'challenge_id': data[0]} );
   });
-
+*/
   $( '#create_challenge' ).unbind( 'click' ).click( function(){
     window.location = 'create.php';
   });
@@ -93,7 +124,7 @@ $( document ).ready( function(){
 
 <div class='history_dt'>
   Challenges in which you've participated (click to view detail)
-  <table id='table1' class='display' cellspacing='0' width='100%' style='cursor: pointer;' >
+  <table id='table1' class='display' cellspacing='0' width='100%' >
     <thead>
       <tr>
         <th>challenge_id</th>
@@ -104,6 +135,8 @@ $( document ).ready( function(){
         <th>Rank</th>
         <th>Team Size</th>
         <th>Status</th>
+        <th>Accept</th>
+        <th>Decline</th>
       </tr>
     </thead>
   </table>
