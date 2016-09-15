@@ -32,8 +32,8 @@ if( isset( $_POST['btn-create'] ) ){
     $stmt->bindParam( ':end_date', $cend);
     if( $stmt->execute() ){
       $lastId = $user->lastInsertId();
-      $sql = 'INSERT INTO wc__challenge_participant( fk_challenge_id, fk_user_id, start_date, end_date, challenge_type )
-                   VALUES( :fk_challenge_id, :fk_user_id, :start_date, :end_date, 1 )';
+      $sql = 'INSERT INTO wc__challenge_participant( fk_challenge_id, fk_user_id, start_date, end_date, challenge_type, status )
+                   VALUES( :fk_challenge_id, :fk_user_id, :start_date, :end_date, 1, "Invited" )';
 
       $stmt = $user->prepQuery( $sql );
       $stmt->bindParam( ':fk_challenge_id', $lastId );
@@ -72,6 +72,7 @@ $( document ).ready( function(){
      dateFormat: 'yy-mm-dd'
     ,changeMonth: true
     ,changeYear: true
+    ,numberOfMonths: [ 1, 3 ]
     ,minDate    : '+1d'
   });
 
