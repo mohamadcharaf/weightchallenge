@@ -8,15 +8,15 @@ $uid = $user->getUID();
 
 //QQQ Move all these global functions into a utility object.
 function isToday( $time ){
-    return( strtotime( $time ) === strtotime( 'today' ) );
+  return( strtotime( $time ) === strtotime( 'today' ) );
 }
 
 function isPast( $time ){
-    return( strtotime( $time ) < time() );
+  return( strtotime( $time ) < time() );
 }
 
 function isFuture( $time ){
-    return( strtotime( $time ) > time() );
+  return( strtotime( $time ) > time() );
 }
 
 /** Messages
@@ -35,12 +35,12 @@ QQQ Create a static Notification object with a couple of funcitons
 $mesg->add()        to replace addNotification()
 $mesg->maintain()   to delete old msgs for present user
  **/
-function addNotification( $uid, $data, $msgType ){
+function delNotification( $uid, $msgType ){
   global $user;
   $msgIdList = array( 1, 2 );
-  if( in_array( $msgId, $msgIdList ) ){
+  if( in_array( $msgType, $msgIdList ) ){
     $sql_string = '
-    DELETE FROM wc__notifcations
+    DELETE FROM wc__notifications
      WHERE fk_user_id = :uid
        AND msg_id = :msg_type';
     $stmt = $user->prepQuery( $sql_string );
@@ -48,6 +48,11 @@ function addNotification( $uid, $data, $msgType ){
     $stmt->bindParam( ':msg_type', $msgType );
     $stmt->execute();
   }
+}
+
+function addNotification( $uid, $data, $msgType ){
+  global $user;
+  delNotification( $uid, $msgType );
 
   $msg_text = null;
   switch( $msgType ){
@@ -55,10 +60,10 @@ function addNotification( $uid, $data, $msgType ){
       $msg_text = $data;
     break;
     case 1:
-      $msg_text = "You have $inviteCount pending invitation(s)";
+      $msg_text = "You have {$data} pending invitation(s)";
     break;
     case 2:
-      $msg_text = "Some message with this $data as extra information.";
+      $msg_text = "Some message with this {$data} as extra information.";
     break;
     default:  // Do not recognize this message so skip it.
       return;
@@ -66,13 +71,15 @@ function addNotification( $uid, $data, $msgType ){
 
 // QQQ msg_id is NOT a key and need not be unique.
   $sql_string = '
-  INSERT INTO wc__notifcations( fk_user_id, msg_id, msg_text  )
+  INSERT INTO wc__notifications( fk_user_id, msg_id, msg_text  )
   VALUES ( :uid, :msg_type, :msg_text )';
   $stmt = $user->prepQuery( $sql_string );
   $stmt->bindParam( ':uid', $uid );
   $stmt->bindParam( ':msg_type', $msgType );
   $stmt->bindParam( ':msg_text', $msg_text );
+  $stmt->execute();
 
+  return;
 }
 ?>
 
@@ -155,7 +162,9 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $disqualifiedCount = $stmt->rowCount();
-addNotification( $uid, "Oh no! On _today_ you were disqualified from $disqualifiedCount challenges due to missed weigh ins.", 0 );
+if( $disqualifiedCount > 0 ){
+  addNotification( $uid, "Oh no! On {date('Y-m-d')} you were disqualified from $disqualifiedCount challenges due to missed weigh ins.", 0 );
+}
 //QQQ Notifications get an added_on date.  They go away after a week.  They can be manually dismissed.
 //QQQ If you have more than 5 notifications, the scroller will add "You have N notifications" where N is the count of them
 
@@ -170,7 +179,9 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $completeCount = $stmt->rowCount();
-addNotification( $uid, "On _today_ you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+if( $completeCount > 0 ){
+  addNotification( $uid, "On _today_ you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+}
 
 
 // Check for missed challenges - ( Invited/Accepted -> Declined if you did not participate)
@@ -184,7 +195,9 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $completeCount = $stmt->rowCount();
-addNotification( $uid, "On _today_ you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+if( $completeCount > 0 ){
+  addNotification( $uid, "On {date('Y-m-d')} you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+}
 
 // Check for challenge starting ( Accepted -> Participating )
 $sql_string = '
@@ -197,7 +210,9 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $startingCount = $stmt->rowCount();
-addNotification( $uid, "On _today_ you $startingCount challenge(s) have started", 0 );
+if( $startingCount > 0 ){
+  addNotification( $uid, "On {date('Y-m-d')} you $startingCount challenge(s) have started", 0 );
+}
 
 //QQQ Hmm, what to do if you log in late and it starts and you are immediately overdue more than 5 days?
 
@@ -211,11 +226,16 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $inviteCount = $stmt->fetchColumn();
-addNotification( $uid, $inviteCount, 1 );
+if( $inviteCount > 0 ){
+  addNotification( $uid, $inviteCount, 1 );
+}
+else if( $inviteCount = 0 ){
+  delNotification( $uid, 1 );
+}
 
 // Maintain notifications (clear week old regular messages)
 $sql_string = '
-DELETE FROM wc__notifcations
+DELETE FROM wc__notifications
  WHERE fk_user_id = :uid
    AND msg_id = 0
    AND added_on < NOW() - INTERVAL 1 WEEK';
@@ -226,23 +246,23 @@ $stmt->execute();
 // Show notifications
 $sql_string = '
 SELECT msg_text
-  FROM wc__notifcations
+  FROM wc__notifications
  WHERE fk_user_id = :uid';
 $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
-$notifcations = $stmt->fetchAll( PDO::FETCH_NUM );
+$notifications = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
 <div id='notification_area' class='tickercontainer'>
   <ul id='notification_ticker' class='newsticker'>
 <?php
-//    <li data-update='item2'>You've been invited to participate in a challenge</li>
-//    <li data-update='item3'>Your weight check in is N days overdue!</li>
-//    <li data-update='item4'>These are static demo messages.</li>
 $msgNum = 0;
-
-if( isset( $notifcations ) ){
-  foreach( $notifcations as $text ){
+if( isset( $notifications ) ){
+  if( count( $notifications ) > 5 ){
+    $msgNum++;
+    echo "<li data-update='item{$msgNum}'>You have many notifications!  Click here to manage them.</p></li>";
+  }
+  foreach( $notifications as $text ){
     $msgNum++;
     echo "<li data-update='item{$msgNum}'>{$text[0]}</p></li>";
   }
@@ -253,7 +273,6 @@ if( isset( $notifcations ) ){
 
 <script type='text/javascript'>
 $( document ).ready( function(){
-//  jQuery( '#notification_ticker' ).webTicker();
   $( '#notification_ticker' ).webTicker({
       speed:         50       // pixels per second
       ,direction:    'left'   // if to move left or right
@@ -265,6 +284,9 @@ $( document ).ready( function(){
       ,updatetype:   'reset'  // how the update would occur options are "reset" or "swap"
   });
 
+  $( '#notification_area' ).unbind( 'click' ).click( function(){
+    window.location = 'notifications.php';
+  });
 
 });
 </script>
