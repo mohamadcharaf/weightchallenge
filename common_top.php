@@ -6,7 +6,7 @@ $user = new USER();
 
 $uid = $user->getUID();
 
-//QQQ Move all these global functions into a utility object.
+//QQQ Move all these global functions into a utility object
 function isToday( $time ){
   return( strtotime( $time ) === strtotime( 'today' ) );
 }
