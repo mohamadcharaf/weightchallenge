@@ -35,7 +35,7 @@ CALL insert_dates();  -- Ignore the error when run from phpMyAdmin that seems to
 
 DROP PROCEDURE insert_dates;
 
-DROP TABLE IF EXISTS wc__notifcations;
+DROP TABLE IF EXISTS wc__notifications;
 DROP TABLE IF EXISTS wc__challenges;
 DROP TABLE IF EXISTS wc__challenge_participant;
 DROP TABLE IF EXISTS wc__user_weigh_in;
@@ -144,11 +144,11 @@ INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016
 INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-30 09:00:00', 241 );
 INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-31 09:00:00', 241 );
 
-  INSERT INTO wc__notifcations( fk_user_id, msg_id, msg_text, added_on )
+  INSERT INTO wc__notifications( fk_user_id, msg_id, msg_text, added_on )
   VALUES ( :uid, :msg_type, :msg_text, now() )';
 
-DROP TABLE IF EXISTS wc__notifcations;
-CREATE TABLE wc__notifcations
+DROP TABLE IF EXISTS wc__notifications;
+CREATE TABLE wc__notifications
 (
    fk_user_id INT(10) NOT NULL
   ,msg_id INT(10) NOT NULL
