@@ -4,6 +4,9 @@ ob_start();
 require_once( 'user.php' );
 $user = new USER();
 
+$uid = $user->getUID();
+
+//QQQ Move all these global functions into a utility object.
 function isToday( $time ){
     return( strtotime( $time ) === strtotime( 'today' ) );
 }
@@ -16,6 +19,61 @@ function isFuture( $time ){
     return( strtotime( $time ) > time() );
 }
 
+/** Messages
+ **
+ ** 0 - not unique - expires one week after first posting
+ ** 1 - unique - Pending invitations
+ ** 2 - unique - not assigned yet
+
+QQQ future messages to add
+"You have N challenges expiring in the next week"
+"You have N challenges starting in the next week"
+"You have not weighed in for N days!" (show regardless of challenge activity status)
+"You are not participating in any challenges.  Why not create one and challenge your friends?"
+
+QQQ Create a static Notification object with a couple of funcitons
+$mesg->add()        to replace addNotification()
+$mesg->maintain()   to delete old msgs for present user
+ **/
+function addNotification( $uid, $data, $msgType ){
+  global $user;
+  $msgIdList = array( 1, 2 );
+  if( in_array( $msgId, $msgIdList ) ){
+    $sql_string = '
+    DELETE FROM wc__notifcations
+     WHERE fk_user_id = :uid
+       AND msg_id = :msg_type';
+    $stmt = $user->prepQuery( $sql_string );
+    $stmt->bindParam( ':uid', $uid );
+    $stmt->bindParam( ':msg_type', $msgType );
+    $stmt->execute();
+  }
+
+  $msg_text = null;
+  switch( $msgType ){
+    case 0:
+      $msg_text = $data;
+    break;
+    case 1:
+      $msg_text = "You have $inviteCount pending invitation(s)";
+    break;
+    case 2:
+      $msg_text = "Some message with this $data as extra information.";
+    break;
+    default:  // Do not recognize this message so skip it.
+      return;
+  }
+
+// QQQ msg_id is NOT a key and need not be unique.
+  $sql_string = '
+  INSERT INTO wc__notifcations( fk_user_id, msg_id, msg_text  )
+  VALUES ( :uid, :msg_type, :msg_text )';
+  $stmt = $user->prepQuery( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->bindParam( ':msg_type', $msgType );
+  $stmt->bindParam( ':msg_text', $msg_text );
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,28 +91,12 @@ function isFuture( $time ){
 
   <script type='text/javascript' src='jquery-ui.min.js'></script> <!-- jQuery UI datepicker stuff (and much more) -->
   <link rel='stylesheet' type='text/css' media='screen' href='jquery-ui.min.css'>
-<!--  <link rel='stylesheet' type='text/css' media='screen' href='jquery-ui.structure.min.css'> -->
-
-<!--  <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-theme.min.css'> -->
-
 
   <script type='text/javascript' charset='utf-8' src='bootstrap/js/bootstrap.min.js'></script>
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap.min.css' />
 
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-table.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/styles.css' />
-
-<!-- Does not seem to do anything -->
-<!-- <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/datepicker3.css' /> -->
-
-<style>
-.ui-datepicker{
-  background-color: #F1F4F7;
-  border: 1px solid;
-  /* border-radius: 10px; */
-}
-</style>
-
 </head>
 <body>
 <?php
@@ -91,13 +133,121 @@ if( $user->is_loggedin() ){
 //QQQ Add them to some kind of scrolling banner.  Show one, wait 30 seconds, show next.
 //QQQ Leave notifications showing in UI until they are acknowledged
 //QQQ In some timer driven ajax script once every 5 minutes rebuild the notificaiton list.
+
+
+/** Look for and perform status changes.
+ ** Status are one of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
+ **/
+
+// Check if too many weigh-ins were missed (Participating -> Disqualified)
+//QQQ Need a warning that a limit is approaching before you get disqualified
+$sql_string = '
+UPDATE wc__challenge_participant wcp
+   SET wcp.status = "Disqualified"
+ WHERE wcp.fk_user_id = :uid
+   AND wcp.status = "Participating"
+   AND wcp.end_date < now()
+   AND 5 < (SELECT COUNT(*)
+              FROM wc__user_weigh_in
+             WHERE weight = NULL
+               AND weigh_date BETWEEN wcp.start_date AND wcp.end_date )';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$disqualifiedCount = $stmt->rowCount();
+addNotification( $uid, "Oh no! On _today_ you were disqualified from $disqualifiedCount challenges due to missed weigh ins.", 0 );
+//QQQ Notifications get an added_on date.  They go away after a week.  They can be manually dismissed.
+//QQQ If you have more than 5 notifications, the scroller will add "You have N notifications" where N is the count of them
+
+// Check if any challenge has ended. ( Participating -> Complete )
+$sql_string = '
+UPDATE wc__challenge_participant
+   SET status = "Complete"
+ WHERE fk_user_id = :uid
+   AND status = "Participating"
+   AND end_date < now()';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$completeCount = $stmt->rowCount();
+addNotification( $uid, "On _today_ you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+
+
+// Check for missed challenges - ( Invited/Accepted -> Declined if you did not participate)
+$sql_string = '
+UPDATE wc__challenge_participant
+   SET status = "Declined"
+ WHERE fk_user_id = :uid
+   AND ( status = "Invited" OR status = "Accepted" )
+   AND end_date < now()';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$completeCount = $stmt->rowCount();
+addNotification( $uid, "On _today_ you completed $completeCount challenge(s).  Check your final rank and brag to your buddies!", 0 );
+
+// Check for challenge starting ( Accepted -> Participating )
+$sql_string = '
+UPDATE wc__challenge_participant
+   SET status = "Participating"
+ WHERE fk_user_id = :uid
+   AND status = "Accepted"
+   AND now() BETWEEN start_date AND end_date';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$startingCount = $stmt->rowCount();
+addNotification( $uid, "On _today_ you $startingCount challenge(s) have started", 0 );
+
+//QQQ Hmm, what to do if you log in late and it starts and you are immediately overdue more than 5 days?
+
+// Show pending invitations - if any challenge is marked as Invited and now() < start_date, show invitation
+$sql_string = '
+SELECT COUNT(*)
+  FROM wc__challenge_participant
+ WHERE fk_user_id = :uid
+   AND status = "Invited"';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$inviteCount = $stmt->fetchColumn();
+addNotification( $uid, $inviteCount, 1 );
+
+// Maintain notifications (clear week old regular messages)
+$sql_string = '
+DELETE FROM wc__notifcations
+ WHERE fk_user_id = :uid
+   AND msg_id = 0
+   AND added_on < NOW() - INTERVAL 1 WEEK';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+
+// Show notifications
+$sql_string = '
+SELECT msg_text
+  FROM wc__notifcations
+ WHERE fk_user_id = :uid';
+$stmt = $user->prepQuery( $sql_string );
+$stmt->bindParam( ':uid', $uid );
+$stmt->execute();
+$notifcations = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
 <div id='notification_area' class='tickercontainer'>
   <ul id='notification_ticker' class='newsticker'>
-    <li data-update='item1'>Common content for when you ARE logged in</p></li>
-    <li data-update='item2'>You've been invited to participate in a challenge</li>
-    <li data-update='item3'>Your weight check in is N days overdue!</li>
-    <li data-update='item4'>These are static demo messages.</li>
+<?php
+//    <li data-update='item2'>You've been invited to participate in a challenge</li>
+//    <li data-update='item3'>Your weight check in is N days overdue!</li>
+//    <li data-update='item4'>These are static demo messages.</li>
+$msgNum = 0;
+
+if( isset( $notifcations ) ){
+  foreach( $notifcations as $text ){
+    $msgNum++;
+    echo "<li data-update='item{$msgNum}'>{$text[0]}</p></li>";
+  }
+}
+?>
   </ul>
 </div>
 
