@@ -13,51 +13,52 @@ if( isset( $_POST['btn-create'] ) ){
     $error[] = 'provide challenge name';
   }
   if( $cstart == '' ){
-    $error[] = 'provide challenge start date';
+    $error[] = 'provide challenge start date YYYY-MM-DD';
   }
   if( $cend == '' ){
-    $error[] = 'provide challenge end date';
+    $error[] = 'provide challenge end date YYYY-MM-DD';
   }
 
   // Go do the DB work to create the challenge (and return 'created'  or error)
   // challenge_id takes care of itself
   // challenge_type is only one type for now.
-  try{
-    $sql = 'INSERT INTO wc__challenges( fk_created_by, challenge_name, start_date, end_date, challenge_type )
-                 VALUES( :fk_created_by, :challenge_name, :start_date, :end_date, 1 )';
-    $stmt = $user->prepQuery( $sql );
-    $stmt->bindParam( ':fk_created_by', $user->getUID() );
-    $stmt->bindParam( ':challenge_name', $cname );
-    $stmt->bindParam( ':start_date', $cstart );
-    $stmt->bindParam( ':end_date', $cend);
-    if( $stmt->execute() ){
-      $lastId = $user->lastInsertId();
-      $sql = 'INSERT INTO wc__challenge_participant( fk_challenge_id, fk_user_id, start_date, end_date, challenge_type, status )
-                   VALUES( :fk_challenge_id, :fk_user_id, :start_date, :end_date, 1, "Invited" )';
-
+  if( ! isset( $error ) ){
+    try{
+      $sql = 'INSERT INTO wc__challenges( fk_created_by, challenge_name, start_date, end_date, challenge_type )
+                   VALUES( :fk_created_by, :challenge_name, :start_date, :end_date, 1 )';
       $stmt = $user->prepQuery( $sql );
-      $stmt->bindParam( ':fk_challenge_id', $lastId );
-      $stmt->bindParam( ':fk_user_id', $user->getUID() );
+      $stmt->bindParam( ':fk_created_by', $user->getUID() );
+      $stmt->bindParam( ':challenge_name', $cname );
       $stmt->bindParam( ':start_date', $cstart );
       $stmt->bindParam( ':end_date', $cend);
       if( $stmt->execute() ){
-        // Success
-        $user->redirect( 'create.php?created' );
+        $lastId = $user->lastInsertId();
+        $sql = 'INSERT INTO wc__challenge_participant( fk_challenge_id, fk_user_id, start_date, end_date, challenge_type, status )
+                     VALUES( :fk_challenge_id, :fk_user_id, :start_date, :end_date, 1, "Invited" )';
+
+        $stmt = $user->prepQuery( $sql );
+        $stmt->bindParam( ':fk_challenge_id', $lastId );
+        $stmt->bindParam( ':fk_user_id', $user->getUID() );
+        $stmt->bindParam( ':start_date', $cstart );
+        $stmt->bindParam( ':end_date', $cend);
+        if( $stmt->execute() ){
+          // Success
+          $user->redirect( 'create.php?created' );
+        }
+        else{
+          // Failure to join challenge
+          $error[] = 'Challenge created, but unable to join';
+        }
       }
       else{
-        // Failure to join challenge
-        $error[] = 'Challenge created, but unable to join';
+        // Failure to create challenge
+        $error[] = 'Challenge not created';
       }
     }
-    else{
-      // Failure to create challenge
-      $error[] = 'Challenge not created';
+    catch( Exception $e ){
+      $error[] = 'Some very bad DB juju';
     }
   }
-  catch( Exception $e ){
-    $error[] = 'Some very bad DB juju';
-  }
-
 }
 else{
 }
@@ -117,7 +118,7 @@ else if( isset( $_GET['created'] ) ){
     </div>
     <div class='form-group'>
       <div class='input-group'>
-        <input type='text' class='form-control datepicker' name='txt_start' id='txt_start' placeholder='Enter challenge start date' value='<?php if(isset($error)){echo $cstart;}?>' />
+        <input type='text' class='form-control datepicker' name='txt_start' id='txt_start' placeholder='Enter challenge start date YYYY-MM-DD' value='<?php if(isset($error)){echo $cstart;}?>' />
         <div class='input-group-addon'>
           <span class='glyphicon glyphicon-calendar'></span>
         </div>
@@ -126,7 +127,7 @@ else if( isset( $_GET['created'] ) ){
 
     <div class='form-group'>
       <div class='input-group'>
-        <input type='text' class='form-control datepicker' name='txt_end' id='txt_end' placeholder='Enter challenge end date' value='<?php if(isset($error)){echo $cend;}?>' />
+        <input type='text' class='form-control datepicker' name='txt_end' id='txt_end' placeholder='Enter challenge end date YYYY-MM-DD' value='<?php if(isset($error)){echo $cend;}?>' />
         <div class='input-group-addon'>
           <span class='glyphicon glyphicon-calendar'></span>
         </div>
