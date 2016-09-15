@@ -35,6 +35,7 @@ CALL insert_dates();  -- Ignore the error when run from phpMyAdmin that seems to
 
 DROP PROCEDURE insert_dates;
 
+DROP TABLE IF EXISTS wc__notifcations;
 DROP TABLE IF EXISTS wc__challenges;
 DROP TABLE IF EXISTS wc__challenge_participant;
 DROP TABLE IF EXISTS wc__user_weigh_in;
@@ -81,7 +82,7 @@ CREATE TABLE wc__challenge_participant
  ,goal_weight INT(10) NOT NULL
  ,rank INT(10) NULL
  ,team_size INT(10) NOT NULL COMMENT 'update this every time a team member joins'
- ,status VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Participating, Complete, or Disqualified'
+ ,status VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
 ,CONSTRAINT FOREIGN KEY (fk_challenge_id) REFERENCES wc__challenges(challenge_id)
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -143,6 +144,18 @@ INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016
 INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-30 09:00:00', 241 );
 INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-31 09:00:00', 241 );
 
+  INSERT INTO wc__notifcations( fk_user_id, msg_id, msg_text, added_on )
+  VALUES ( :uid, :msg_type, :msg_text, now() )';
+
+DROP TABLE IF EXISTS wc__notifcations;
+CREATE TABLE wc__notifcations
+(
+   fk_user_id INT(10) NOT NULL
+  ,msg_id INT(10) NOT NULL
+  ,msg_text VARCHAR(255) NOT NULL
+  ,added_on DATETIME NOT NULL DEFAULT NOW()
+ ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 */
 
