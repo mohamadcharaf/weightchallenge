@@ -33,7 +33,7 @@ if( isset( $_POST['btn-signup'] ) ){
       $stmt->bindParam( ':uname', $uname );
       $stmt->bindParam( ':umail', $umail );
       $stmt->execute();
-      $row=$stmt->fetch( PDO::FETCH_ASSOC );
+      $row = $stmt->fetch( PDO::FETCH_ASSOC );
 
       if( $row['user_name'] == $uname ){
         $error[] = 'sorry username already taken !';
