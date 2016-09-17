@@ -22,6 +22,19 @@ $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 $notifications = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
+<style type='text/css'>
+.wc__ticker_layout{
+  font-weight: 300;
+  font-size: 30px;
+  color: #00A2D1;
+}
+.tickercontainer{
+  height: 43px !important;
+}
+.tickercontainer .mask{
+  height: 34px;
+}
+</style>
 <div id='notification_area' class='tickercontainer'>
   <ul id='notification_ticker' class='newsticker'>
 <?php
@@ -29,19 +42,17 @@ $msgNum = 0;
 if( isset( $notifications ) ){
   if( count( $notifications ) > 5 ){
     $msgNum++;
-    echo "<li data-update='item{$msgNum}'>You have many notifications!  Click here to manage them.</p></li>";
+    echo "<li class='wc__ticker_layout' data-update='item{$msgNum}'>You have many notifications!  Click here to manage them.</p></li>";
   }
   foreach( $notifications as $text ){
     $msgNum++;
-    echo "<li data-update='item{$msgNum}'>{$text[0]}</p></li>";
+    echo "<li class='wc__ticker_layout' data-update='item{$msgNum}'>{$text[0]}</p></li>";
   }
 }
 ?>
   </ul>
 </div>
 
-
-<p class='h4'>User Home Page</p>
 <hr>
 This is where your dashboard will show up.
 <?php

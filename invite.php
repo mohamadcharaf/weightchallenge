@@ -80,7 +80,7 @@ $stmt->execute();
 $participants = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
 
-<style>
+<style type='text/css'>
 table.participants td, table.participants th{
   padding: 1px 10px;
 }
