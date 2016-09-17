@@ -1,11 +1,11 @@
 <?php
-
+  // In case of emergency.
 ?>
-        <p class='blockquote-reverse' style='margin-top:200px;'>
-          This is the RedHat OpenShift Weight Challenge Hackathon App
-          <br />
-          <br />
-          <a href="http://openshift.devpost.com/?ref_content=featured&ref_feature=challenge&ref_medium=portfolio">Code Healthy With OpenShift</a>
+        <p class='blockquote-reverse' style='position: fixed; bottom: 0px; right: 0px;'>
+          OpenShift Weight Challenge Hackathon App
+          <br>
+          <br>
+          <a target='_blank' href='http://devpost.com/software/weightchallenge'>Code Healthy With OpenShift</a>
         </p>
       </div>
     </div>
