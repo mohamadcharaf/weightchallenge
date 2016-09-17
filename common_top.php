@@ -6,35 +6,28 @@ $user = new USER();
 
 $uid = $user->getUID();
 
-//QQQ Move all these global functions into a utility object
+//QQQ Move all these global functions into a utility object.
 function isToday( $time ){
+  if( ! isset( $time ) ) return false;
   return( strtotime( $time ) === strtotime( 'today' ) );
 }
 
 function isPast( $time ){
+  if( ! isset( $time ) ) return false;
   return( strtotime( $time ) < time() );
 }
 
 function isFuture( $time ){
+  if( ! isset( $time ) ) return false;
   return( strtotime( $time ) > time() );
 }
 
-/** Messages
- **
- ** 0 - not unique - expires one week after first posting
- ** 1 - unique - Pending invitations
- ** 2 - unique - not assigned yet
-
-QQQ future messages to add
-"You have N challenges expiring in the next week"
-"You have N challenges starting in the next week"
-"You have not weighed in for N days!" (show regardless of challenge activity status)
-"You are not participating in any challenges.  Why not create one and challenge your friends?"
-
-QQQ Create a static Notification object with a couple of funcitons
+/** QQQ Create a static Notification object with a couple of functions
 $mesg->add()        to replace addNotification()
+$mesg->del()        to replace delNotification()
 $mesg->maintain()   to delete old msgs for present user
  **/
+
 function delNotification( $uid, $msgType ){
   global $user;
   $msgIdList = array( 1, 2 );
@@ -81,6 +74,7 @@ function addNotification( $uid, $data, $msgType ){
 
   return;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -136,18 +130,11 @@ if( $user->is_loggedin() ){
 </nav>
 
 <?php
-//QQQ Add code here to check notifications table to see if user has any.
-//QQQ Add them to some kind of scrolling banner.  Show one, wait 30 seconds, show next.
-//QQQ Leave notifications showing in UI until they are acknowledged
-//QQQ In some timer driven ajax script once every 5 minutes rebuild the notificaiton list.
-
-
 /** Look for and perform status changes.
  ** Status are one of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
  **/
 
 // Check if too many weigh-ins were missed (Participating -> Disqualified)
-//QQQ Need a warning that a limit is approaching before you get disqualified
 $sql_string = '
 UPDATE wc__challenge_participant wcp
    SET wcp.status = "Disqualified"
@@ -165,8 +152,6 @@ $disqualifiedCount = $stmt->rowCount();
 if( $disqualifiedCount > 0 ){
   addNotification( $uid, "Oh no! On {date('Y-m-d')} you were disqualified from $disqualifiedCount challenges due to missed weigh ins.", 0 );
 }
-//QQQ Notifications get an added_on date.  They go away after a week.  They can be manually dismissed.
-//QQQ If you have more than 5 notifications, the scroller will add "You have N notifications" where N is the count of them
 
 // Check if any challenge has ended. ( Participating -> Complete )
 $sql_string = '
@@ -243,33 +228,7 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':uid', $uid );
 $stmt->execute();
 
-// Show notifications
-$sql_string = '
-SELECT msg_text
-  FROM wc__notifications
- WHERE fk_user_id = :uid';
-$stmt = $user->prepQuery( $sql_string );
-$stmt->bindParam( ':uid', $uid );
-$stmt->execute();
-$notifications = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
-<div id='notification_area' class='tickercontainer'>
-  <ul id='notification_ticker' class='newsticker'>
-<?php
-$msgNum = 0;
-if( isset( $notifications ) ){
-  if( count( $notifications ) > 5 ){
-    $msgNum++;
-    echo "<li data-update='item{$msgNum}'>You have many notifications!  Click here to manage them.</p></li>";
-  }
-  foreach( $notifications as $text ){
-    $msgNum++;
-    echo "<li data-update='item{$msgNum}'>{$text[0]}</p></li>";
-  }
-}
-?>
-  </ul>
-</div>
 
 <script type='text/javascript'>
 $( document ).ready( function(){
