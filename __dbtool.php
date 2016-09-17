@@ -79,9 +79,9 @@ CREATE TABLE wc__challenge_participant
  ,end_date DATETIME NOT NULL COMMENT 'copy this data value when challenge is joined'
  ,challenge_type INT(10) NOT NULL DEFAULT 1 COMMENT 'copy this data value when challenge is joined'
  ,start_weight INT(10) NULL
- ,goal_weight INT(10) NOT NULL
+ ,goal_weight INT(10) NULL
  ,rank INT(10) NULL
- ,team_size INT(10) NOT NULL COMMENT 'update this every time a team member joins'
+ ,team_size INT(10) NULL COMMENT 'update this every time a team member joins'
  ,status VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
 ,CONSTRAINT FOREIGN KEY (fk_challenge_id) REFERENCES wc__challenges(challenge_id)
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
