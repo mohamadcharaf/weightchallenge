@@ -19,18 +19,23 @@ if( isset( $_POST['btn-invite'] ) ){
       $sql_string = '
       SELECT user_id
         FROM wc__users
-       WHERE user_email = ":email"';
+       WHERE user_email = :email';
       $stmt = $user->prepQuery( $sql_string );
       $stmt->bindParam( ':email', $email );
       $stmt->execute();
-      $invitee_id = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
+// QQQ Hmm, this needs to be a unique key to prevent double inserts.
+// QQQ And it seems to be inserting two anyway.
+      $row = $stmt->fetch( PDO::FETCH_ASSOC );
+      $invitee_id = $row[ 'user_id' ];
       $sql_string = '
         INSERT INTO wc__challenge_participant( fk_challenge_id, fk_user_id, start_date, end_date, challenge_type, status )
-        VALUES( :cid, :invitee_id )';
+        SELECT challenge_id, :invitee_id, start_date, end_date, challenge_type, "Invited"
+          FROM wc__challenges
+         WHERE challenge_id = :cid';
       $stmt = $user->prepQuery( $sql_string );
-      $stmt->bindParam( ':cid', $challenge_id );
       $stmt->bindParam( ':invitee_id', $invitee_id );
+      $stmt->bindParam( ':cid', $challenge_id );
       $stmt->execute();
 
       $sql_string = '
@@ -45,9 +50,9 @@ if( isset( $_POST['btn-invite'] ) ){
       $stmt->execute();
 
     }
-    catch( Exception $e ){
+    catch( PDOException $e ){
       // Look for the no rows found error and suggest they invite thier friend to sign up for the program
-      $error[] = 'Sorry that person is not yet participating.  Please invite them to join by clicking HERE';
+      $error[] = "An error prevented you from inviting that person.  Perhaps they are not yet participating.  Please invite them to join by clicking <a href='mailto:{$email}?Subject=You have been invited to join Weightloss Challenge!&body=Visit http://link_here to join'>HERE</a>";
     }
 
 
@@ -89,7 +94,7 @@ if( isset( $participants ) ){
     echo "<tr><th style='width: 5%;'>Participant</th><th style='width: 95%;'>Name</th></tr>";
   foreach( $participants as $person ){
     $playerNum++;
-    echo "<tr><td style='text-align: right;'>{$playerNum}</td><td><a href='mailto:{$person[1]}?Subject=You have been invited to a challenge!&body=Click here to join (NEED embedded URL)'>{$person[0]}</a></td></tr>";
+    echo "<tr><td style='text-align: right;'>{$playerNum}</td><td><a href='mailto:{$person[1]}?Subject=You have been invited to a challenge!&body=Click here to join (NEED embedded URL)' title='Click here to open your email client to send an invitation'>{$person[0]}</a></td></tr>";
   }
   echo '</table>';
 }
