@@ -4,8 +4,6 @@ require( 'user.php' );
 
 $uname = (isset($_REQUEST['user'])) ? $_REQUEST['user'] : null;         // Set uname to chosen user name (or null if not chosen)
 $session = (isset($_REQUEST['session'])) ? $_REQUEST['session'] : null; // Set session to chosen session id (or null if not chosen)
-//QQQ Do a test...  Log in, then with phpMyAdmin mess up the session id.  Then hit Refresh button on Home page.
-//QQQ The expected result is that you'll be denied access.
 
 $user = new USER( $uname, $session );
 $uid = $user->getUID();
@@ -18,10 +16,11 @@ $draw = (int) ( (isset($_REQUEST['draw'])) ? htmlspecialchars($_REQUEST['draw'])
 $start = (int) ( (isset($_REQUEST['start'])) ? htmlspecialchars($_REQUEST['start']) : 0 );
 $length = (int) ( (isset($_REQUEST['length'])) ? htmlspecialchars($_REQUEST['length']) : 10 );
 
+$action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : null;  // Determine why this was called
+
 $database = new Database();
 $pdo = $database->dbConnection();
 
-$action = (isset($_REQUEST['action'])) ? $_REQUEST['action'] : null;  // Determine why this was called
 if( $action === 'creation' ){
   // Get total count
   $sql_string =  '
@@ -47,24 +46,16 @@ if( $action === 'creation' ){
   $stmt->bindParam( ':uid', $uid );
   $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
   $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
-  $stmt->execute();
-
-  $allData = $stmt->fetchAll( PDO::FETCH_NUM );
-
-  echo '{';
-  echo '"draw": ' . $draw;
-  echo ',"recordsTotal": ' . $totalCount;
-  echo ',"recordsFiltered": ' . $filterCount;
-  echo ',"data": ' . json_encode( $allData );
-  echo '}';
 }
-else if( $action === 'participation'){
-
+else if( $action === 'participation' ){
   // Get total count
-  $sql_string =  '
+  $sql_string = '
   SELECT COUNT(*)
     FROM wc__challenge_participant
    WHERE fk_user_id = :uid';
+  if( $action === 'active' ){
+    $sql_string .= ' AND status = "Participating"';
+  }
   $stmt = $pdo->prepare( $sql_string );
   $stmt->bindParam( ':uid', $uid );
   $stmt->execute();
@@ -86,7 +77,11 @@ else if( $action === 'participation'){
            ,IF( status = "Invited", "<span class=\'glyphicon glyphicon-thumbs-up\' title=\'Click to accept this challenge\'></span>", "&nbsp;" )
            ,IF( status = "Invited", "<span class=\'glyphicon glyphicon-thumbs-down\' title=\'Click to decline this challenge\'></span>", "&nbsp;" )
        FROM wc__challenge_participant
-      WHERE fk_user_id = :uid
+      WHERE fk_user_id = :uid';
+  if( $action === 'active' ){
+    $sql_string .= ' AND status = "Participating"';
+  }
+  $sql_string .= '
    ORDER BY start_date DESC
    LIMIT :start, :length';
 
@@ -94,20 +89,58 @@ else if( $action === 'participation'){
   $stmt->bindParam( ':uid', $uid );
   $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
   $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging support
+}
+else if( $action === 'active' ){
+  // Get total count
+  $sql_string = '
+  SELECT COUNT(*)
+    FROM wc__challenge_participant
+   WHERE fk_user_id = :uid
+     AND status = "Participating"';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
   $stmt->execute();
+  $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
 
-  $allData = $stmt->fetchAll( PDO::FETCH_NUM );
+  // Get filtered count
+  $filterCount = $totalCount;
 
-  echo '{';
-  echo '"draw": ' . $draw;
-  echo ',"recordsTotal": ' . $totalCount;
-  echo ',"recordsFiltered": ' . $filterCount;
-  echo ',"data": ' . json_encode( $allData );
-  echo '}';
+  // Get the actual data for display
+  $sql_string = '
+     SELECT c.challenge_id
+           ,c.challenge_name
+           ,"99"
+           ,"LOST"
+           ,cp.start_weight
+           ,cp.goal_weight
+       FROM wc__challenge_participant cp
+           ,wc__challenges c
+      WHERE cp.fk_user_id = :uid
+        AND cp.status = "Participating"
+        AND c.challenge_id = cp.fk_challenge_id
+   ORDER BY c.start_date DESC
+   LIMIT :start, :length';
+
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':uid', $uid );
+  $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
+  $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging supportelse
 }
 else{
   // Bad value for $action.  Ignore request.
+  return;
 }
+
+$stmt->execute();
+
+$allData = $stmt->fetchAll( PDO::FETCH_NUM );
+
+echo '{';
+echo '"draw": ' . $draw;
+echo ',"recordsTotal": ' . $totalCount;
+echo ',"recordsFiltered": ' . $filterCount;
+echo ',"data": ' . json_encode( $allData );
+echo '}';
 
 return;
 ?>

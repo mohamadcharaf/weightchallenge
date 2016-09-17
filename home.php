@@ -2,8 +2,6 @@
 require_once( 'session.php' );
 require_once( 'common_top.php' );
 
-//http://jsfiddle.net/MafjT/
-
 /** Messages
  **
  ** 0 - not unique - expires one week after first posting
@@ -11,8 +9,6 @@ require_once( 'common_top.php' );
  ** 2 - unique - not assigned yet
 
  **/
-
-
 // Show notifications
 $sql_string = '
 SELECT msg_text
@@ -52,9 +48,9 @@ div.pretty{
   text-align: center;
   font-size: 2em;
   padding: 20px;
-/*  border: 1px solid black; */
   width: 250px;
-  height: 250px;
+  min-height: 250px;
+  overflow: auto;
   text-align: center;
   background-color: rgb( 175, 177, 165 );
   border-radius: 10px;
@@ -67,7 +63,6 @@ span.score{
   display: inline-block;
   height: 80px;
   width: 80px;
-/*  line-height: 60px; */
   border-radius: 40px;
   background-color: rgb( 250, 255, 189 );
   color: #00A2D1;
@@ -94,6 +89,11 @@ span.goal{
 </style>
 
 <script type='text/javascript'>
+var util = {};
+util.update = function( rowData ){
+  updateBadge( rowData[1], rowData[2], rowData[3], rowData[4], rowData[5]);
+}
+
 function updateBadge( title, change, result, start, goal ){
   $( '#challenge_shiny' ).addClass( 'hide_me' ).removeClass( 'show_me' );
   $( '#challenge_title' ).text( title );
@@ -105,7 +105,28 @@ function updateBadge( title, change, result, start, goal ){
 }
 
 $( document ).ready( function(){
-  updateBadge( 'Dummy Title', 15, 'LOST', '200', '190' );
+//  updateBadge( 'Dummy Title', 15, 'LOST', '200', '190' );
+
+  var dt0 = $( '#table0' ).DataTable({
+     'processing':    true
+    ,'dom':           '<"toolbar">frtip'
+    ,'serverSide':    true
+    ,'ajax':          'history_dl.php?action=active&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
+    ,'displayLength': 25
+    ,'info':          true
+    ,'searching':     false
+    ,'ordering':      false
+    ,'scrollY':       '200px'
+    ,'paging':        true
+    ,'language':      { 'emptyTable': 'You have not yet been invited any challenges.' }
+    ,'columnDefs':    [{ 'targets': [ 0, 2, 3, 4, 5 ]
+                        ,'visible': false }
+                      ,{ 'targets': [ 1 ]
+                         ,'createdCell': function( td, cellData, rowData, row, col ){
+                                           $(td).css( { 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ util.update( rowData ); });
+                                         }}
+                      ]
+  });
 });
 </script>
 
@@ -138,8 +159,25 @@ if( isset( $notifications ) ){
       </div>
     </div>
   </div>
-  <div style='width: 45%; height: 200px; float: right;border: 1px solid red;'>&nbsp;
+  <div style='width: 45%; height: 200px; float: right; /*border: 1px solid red;*/'>&nbsp;
     <div id='challenge_list'>
+
+      <div class='history_dt'>
+        Challenges in which you're participing (click to see progress)
+        <table id='table0' class='display' cellspacing='0' width='100%' >
+          <thead>
+            <tr>
+              <th>challenge_id</th>
+              <th>Challenge Name</th>
+              <th>challenge_progress</th>
+              <th>challenge_result</th>
+              <th>challenge_start</th>
+              <th>challenge_goal</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+
     </div>
   </div></div>
 

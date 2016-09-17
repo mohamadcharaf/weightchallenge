@@ -19,20 +19,20 @@ util.post = function( url, fields ){
 
 $( document ).ready( function(){
   var dt0 = $( '#table0' ).DataTable({
-     processing:      true
-    ,dom:             '<"toolbar">frtip'
-    ,serverSide:      true
-    ,ajax:            'history_dl.php?action=creation&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
-    ,displayLength:   25
-    ,info:            true
-    ,searching:       false
-    ,ordering:        false
-    ,scrollY:         '200px'
-    ,paging:          true
-    ,columnDefs:      [{
-       targets:  [ 0 ]
-      ,visible: false
-     }]
+     'processing':    true
+    ,'dom':           '<"toolbar">frtip'
+    ,'serverSide':    true
+    ,'ajax':          'history_dl.php?action=creation&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
+    ,'displayLength': 25
+    ,'info':          true
+    ,'searching':     false
+    ,'ordering':      false
+    ,'scrollY':       '200px'
+    ,'paging':        true
+    ,'language':      { 'emptyTable': 'You have no pending challenges to edit.' }
+    ,'columnDefs':    [ { 'targets': [ 0 ]
+                       ,'visible': false }
+                      ]
   });
   $( '#table0 tr' ).css( 'cursor', 'pointer' ); // This is not working.  Manually forced style on table
   $( '#table0 tbody' ).on( 'click', 'tr', function (){
@@ -41,74 +41,62 @@ $( document ).ready( function(){
   });
 
   var dt1 = $( '#table1' ).DataTable({
-     processing:      true
-    ,dom:             '<"toolbar">frtip'
-    ,serverSide:      true
-    ,ajax:            'history_dl.php?action=participation&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
-    ,displayLength:   25
-    ,info:            true
-    ,searching:       false
-    ,ordering:        false
-    ,scrollY:         '200px'
-    ,paging:          true
-    ,columnDefs:      [{ 'targets': [ 0 ]
-                        ,'visible': false
-                       }
-                      ,{ 'targets':     [ 1, 2, 3, 4, 5, 6, 7 ]
-                        ,'createdCell': function( td, cellData, rowData, row, col ){
-                                          $(td).css( { 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ util.post( 'challenge.php', { 'challenge_id': rowData[0] } ); });
-                                        }
-                       }
-
+     'processing':    true
+    ,'dom':           '<"toolbar">frtip'
+    ,'serverSide':    true
+    ,'ajax':          'history_dl.php?action=participation&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>'
+    ,'displayLength': 25
+    ,'info':          true
+    ,'searching':     false
+    ,'ordering':      false
+    ,'scrollY':       '200px'
+    ,'paging':        true
+    ,'language':      { 'emptyTable': 'You have not yet been invited any challenges.' }
+    ,'columnDefs':    [{ 'targets': [ 0 ]
+                          ,'visible': false }
+                       ,{ 'targets':     [ 1, 2, 3, 4, 5, 6, 7 ]
+                         ,'createdCell': function( td, cellData, rowData, row, col ){
+                                           $(td).css( { 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ util.post( 'challenge.php', { 'challenge_id': rowData[0] } ); });
+                                         }}
 /*
                       ,{ 'targets':     [ 3, 4, 5, 6 ]
                         ,'createdCell': function( td, cellData, rowData, row, col ){
 //                                        $(td).css( { 'text-align': 'right' } ); // These two ( .css() and .addClass() ) are equivalent
                                           $(td).addClass( 'dt-right' );           // These two ( .css() and .addClass() ) are equivalent
-                                        }
-                       }
+                                        }}
 */
-                      ,{ 'targets':   [ 3, 4, 5, 6 ]
-                        ,'className': 'dt-right' } // This way also aligns the column title right
-                      ,{ 'targets':   [ 7, 8, 9 ]
-                        ,'className': 'dt-center' }
-                      ,{ 'targets':     [ 8 ]
-                        ,'createdCell': function( td, cellData, rowData, row, col ){
-                                          if( rowData[7] == 'Invited' ){
-                                            $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'accepted'); });
+                       ,{ 'targets':   [ 3, 4, 5, 6 ]
+                         ,'className': 'dt-right' } // This way also aligns the column title right
+                       ,{ 'targets':   [ 7, 8, 9 ]
+                         ,'className': 'dt-center' }
+                       ,{ 'targets':     [ 8 ]
+                         ,'createdCell': function( td, cellData, rowData, row, col ){
+                                           if( rowData[7] == 'Invited' ){
+                                             $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'accepted'); });
+                                           }
                                           }
-                                         }
-                       }
-                      ,{ 'targets':     [ 9 ]
-                        ,'createdCell': function( td, cellData, rowData, row, col ){
-                                          if( rowData[7] == 'Invited' ){
-                                            $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'declined'); });
-                                          }
-                                        }
-                       }]
+                        }
+                       ,{ 'targets':     [ 9 ]
+                         ,'createdCell': function( td, cellData, rowData, row, col ){
+                                           if( rowData[7] == 'Invited' ){
+                                             $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'declined'); });
+                                           }
+                                         }}
+                      ]
   });
 
-/*
-  $( '#table1 tbody' ).unbind( 'click' ).on( 'click', 'tr', function (){
-    var data = dt1.row( this ).data();
-    util.post( 'challenge.php', {'challenge_id': data[0]} );
-  });
-*/
+
   $( '#create_challenge' ).unbind( 'click' ).click( function(){
     window.location = 'create.php';
   });
 });
 </script>
-<form id='fake_form' action='XXXXXX.php' method='post'></form>
-<p class='h4'>Challenge</p>
-<hr>
-
+<form id='fake_form' action='create.php' method='post'></form>
 <div class='history_dt'>
   Challenges you've created (click to edit/view)
   <button type='button' name='btn-signup' class='btn btn-default' id='create_challenge' style='float: right;'>
     <i class='glyphicon glyphicon-check'></i>&nbsp;NEW CHALLENGE
   </button>
-
   <table id='table0' class='display' cellspacing='0' width='100%' style='cursor: pointer;' >
     <thead>
       <tr>
@@ -121,7 +109,7 @@ $( document ).ready( function(){
     </thead>
   </table>
 </div>
-
+<hr>
 <div class='history_dt'>
   Challenges in which you've participated (click to view detail)
   <table id='table1' class='display' cellspacing='0' width='100%' >
