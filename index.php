@@ -47,7 +47,7 @@ if( isset( $error ) ){
     <hr />
 
     <div class='form-group'>
-      <button type='submit' name='btn-login' class='btn btn-default'>
+      <button type='submit' name='btn-login' class='btn btn-primary'>
         <i class='glyphicon glyphicon-log-in'></i>&nbsp;SIGN IN
       </button>
     </div>

@@ -94,7 +94,7 @@ $( document ).ready( function(){
 <form id='fake_form' action='create.php' method='post'></form>
 <div class='history_dt'>
   Challenges you've created (click to edit/view)
-  <button type='button' name='btn-signup' class='btn btn-default' id='create_challenge' style='float: right;'>
+  <button type='button' name='btn-signup' class='btn btn-primary' id='create_challenge' style='float: right;'>
     <i class='glyphicon glyphicon-check'></i>&nbsp;NEW CHALLENGE
   </button>
   <table id='table0' class='display' cellspacing='0' width='100%' style='cursor: pointer;' >

@@ -70,11 +70,11 @@ $( document ).ready( function(){
 
 // jQuery UI version
   $( '.datepicker' ).datepicker({
-     dateFormat: 'yy-mm-dd'
-    ,changeMonth: true
-    ,changeYear: true
+     dateFormat:     'yy-mm-dd'
+    ,changeMonth:    true
+    ,changeYear:     true
     ,numberOfMonths: [ 1, 3 ]
-    ,minDate    : '+1d'
+    ,minDate:        '+1d'
   });
 
   $( '#invite_challenge' ).unbind( 'click' ).click( function(){
@@ -104,11 +104,10 @@ else if( isset( $_GET['created'] ) ){
 ?>
     <div class='alert alert-info'>
       <i class='glyphicon glyphicon-log-in'></i> &nbsp; Challenge successfully created.
+      <button type='button' name='btn-invite' class='btn btn-primary' id='invite_challenge'>
+        <i class='glyphicon glyphicon-check'></i>&nbsp;INVITE PEOPLE
+      </button>
     </div>
-<br>Button to take user to invite page
-  <button type='button' name='btn-invite' class='btn btn-default' id='invite_challenge'>
-    <i class='glyphicon glyphicon-check'></i>&nbsp;INVITE OTHERS
-  </button>
 
 <?php
 }
@@ -137,7 +136,7 @@ else if( isset( $_GET['created'] ) ){
     <div class='clearfix'></div>
     <hr />
     <div class='form-group'>
-      <button type='submit' name='btn-create' class='btn btn-default'>
+      <button type='submit' name='btn-create' class='btn btn-primary'>
         <i class='glyphicon glyphicon-check'></i>&nbsp;CREATE
       </button>
     </div>

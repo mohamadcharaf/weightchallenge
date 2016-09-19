@@ -89,7 +89,7 @@ else if( isset( $_GET['joined'] ) ){
     <div class='clearfix'></div>
     <hr />
     <div class='form-group'>
-      <button type='submit' name='btn-signup' class='btn btn-default'>
+      <button type='submit' name='btn-signup' class='btn btn-primary'>
         <i class='glyphicon glyphicon-check'></i>&nbsp;SIGN UP
       </button>
     </div>

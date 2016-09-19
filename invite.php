@@ -131,7 +131,7 @@ if( isset( $error ) ){
     </div>
     <div class='form-group'>
       <input type='hidden' name='challenge_id' value='<?php echo $challenge_id;?>'>
-      <button type='submit' name='btn-invite' class='btn btn-default' id='invite_challenge'>
+      <button type='submit' name='btn-invite' class='btn btn-primary' id='invite_challenge'>
         <i class='glyphicon glyphicon-check'></i>&nbsp;INVITE
       </button>
     </div>
