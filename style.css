@@ -9,7 +9,7 @@ body{
     max-width: 500px;
     padding: 19px 29px 29px;
     margin: 0 auto;
-	//margin-top:90px;
+/* margin-top:90px; */
     background-color: #fff;
 	
     border: 1px solid #e5e5e5;
@@ -38,11 +38,11 @@ body{
 
 .signin-form, .body-container
 {
-	//border:solid red 1px;
+/*border:solid red 1px; */
 	margin-top:110px;
 }
 .navbar-brand{
-	font-family:"Lucida Handwriting";
+	font-family: "Lucida Handwriting";
 }
 #btn-submit{
 	height:45px;

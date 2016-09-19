@@ -162,13 +162,13 @@ if( isset( $notifications ) ){
   <div style='width: 45%; height: 200px; float: right; /*border: 1px solid red;*/'>&nbsp;
     <div id='challenge_list'>
 
-      <div class='history_dt'>
+      <div class='history_dt' style='width: 50%; float: left'>
         Challenges in which you're participing (click to see progress)
         <table id='table0' class='display' cellspacing='0' width='100%' >
           <thead>
             <tr>
               <th>challenge_id</th>
-              <th>Challenge Name</th>
+              <th>Active Challenges</th>
               <th>challenge_progress</th>
               <th>challenge_result</th>
               <th>challenge_start</th>

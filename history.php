@@ -77,7 +77,7 @@ $( document ).ready( function(){
                                                   url:      'history_dl.php?action=accept&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>&challenge_id=' + rowData[0]
                                                   ,context: document.body
                                                 }).done(function() {
-                                                dt1.draw();
+                                                dt1.draw( false );
                                                 });
                                              });
                                            }
@@ -91,7 +91,7 @@ $( document ).ready( function(){
                                                   url:      'history_dl.php?action=decline&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>&challenge_id=' + rowData[0]
                                                   ,context: document.body
                                                 }).done(function() {
-                                                dt1.draw();
+                                                dt1.draw( false );
                                                 });
 
                                              });
