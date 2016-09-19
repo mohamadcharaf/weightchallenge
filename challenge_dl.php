@@ -16,52 +16,74 @@ if( $challenge_id == -1 ){
      AND fk_user_id = :uid
  **/
   $sql_string = '
-  SELECT fk_challenge_id
-        ,start_date
-        ,end_date
-        ,start_weight
-        ,goal_weight
-        ,rank
-        ,team_size
-        ,(SELECT c.challenge_name
-            FROM wc__challenges c
-           WHERE c.challenge_id = fk_challenge_id )
-        ,(SELECT uwi.weight
-           FROM wc__user_weigh_in uwi
-          WHERE uwi.fk_user_id = :uid
-            AND uwi.weigh_date = ( SELECT max(weigh_date)
-                                     FROM wc__user_weigh_in
-                                    WHERE fk_user_id = :uid
-                                      AND weight IS NOT null
-                                      AND weigh_date BETWEEN start_date AND end_date )) AS weight
-    FROM wc__challenge_participant
-   WHERE fk_user_id = :uid
-     AND status = "Participating"';
+SELECT fk_challenge_id
+      ,start_date
+      ,end_date
+      ,start_weight
+      ,goal_weight
+      ,rank
+      ,team_size
+      ,challenge_name
+      ,weight
+      ,IF( weight > start_weight, start_weight - weight, weight - start_weight )
+      ,IF( weight > start_weight, "GAINED", "LOST" )
+  FROM( SELECT fk_challenge_id
+              ,start_date
+              ,end_date
+              ,start_weight
+              ,goal_weight
+              ,rank
+              ,team_size
+              ,(SELECT c.challenge_name
+                  FROM wc__challenges c
+                 WHERE c.challenge_id = fk_challenge_id ) AS challenge_name
+              ,(SELECT uwi.weight
+                 FROM wc__user_weigh_in uwi
+                WHERE uwi.fk_user_id = :uid
+                  AND uwi.weigh_date = ( SELECT max(weigh_date)
+                                           FROM wc__user_weigh_in
+                                          WHERE fk_user_id = :uid
+                                            AND weight IS NOT null
+                                            AND weigh_date BETWEEN start_date AND end_date )) AS weight
+          FROM wc__challenge_participant
+         WHERE fk_user_id = :uid
+           AND status = "Participating" ) box';
 
   $stmt = $user->prepQuery( $sql_string );
   $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );
 }
 else{
   $sql_string = '
-  SELECT fk_challenge_id
-        ,start_date
-        ,end_date
-        ,start_weight
-        ,goal_weight
-        ,rank
-        ,team_size
-        ,(SELECT challenge_name FROM wc__challenges WHERE challenge_id = fk_challenge_id )
-        ,(SELECT uwi.weight
-           FROM wc__user_weigh_in uwi
-          WHERE uwi.fk_user_id = :uid
-            AND uwi.weigh_date = ( SELECT max(weigh_date)
-                                     FROM wc__user_weigh_in
-                                    WHERE fk_user_id = :uid
-                                      AND weight IS NOT null
-                                      AND weigh_date BETWEEN start_date AND end_date )) AS weight
-    FROM wc__challenge_participant
-   WHERE fk_challenge_id = :challenge_id
-     AND fk_user_id = :uid';
+SELECT fk_challenge_id
+      ,start_date
+      ,end_date
+      ,start_weight
+      ,goal_weight
+      ,rank
+      ,team_size
+      ,challenge_name
+      ,weight
+      ,IF( weight > start_weight, start_weight - weight, weight - start_weight )
+      ,IF( weight > start_weight, "GAINED", "LOST" )
+  FROM( SELECT fk_challenge_id
+              ,start_date
+              ,end_date
+              ,start_weight
+              ,goal_weight
+              ,rank
+              ,team_size
+              ,(SELECT challenge_name FROM wc__challenges WHERE challenge_id = fk_challenge_id ) AS challenge_name
+              ,(SELECT uwi.weight
+                 FROM wc__user_weigh_in uwi
+                WHERE uwi.fk_user_id = :uid
+                  AND uwi.weigh_date = ( SELECT max(weigh_date)
+                                           FROM wc__user_weigh_in
+                                          WHERE fk_user_id = :uid
+                                            AND weight IS NOT null
+                                            AND weigh_date BETWEEN start_date AND end_date )) AS weight
+          FROM wc__challenge_participant
+         WHERE fk_challenge_id = :challenge_id
+           AND fk_user_id = :uid ) box';
 
   $stmt = $user->prepQuery( $sql_string );
   $stmt->bindParam( ':uid', $uid, PDO::PARAM_INT );

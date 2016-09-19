@@ -31,61 +31,6 @@ $notifications = $stmt->fetchAll( PDO::FETCH_NUM );
 .tickercontainer .mask{
   height: 34px;
 }
-.hide_me{
-  display: none;
-  opacity: 0;
-}
-.show_me{
-  display: visible;
-  opacity: 1;
-  transition: opacity 4.5s linear;
-}
-div.challenge_title{
-  position: relative;
-  top: -5px;
-}
-div.pretty{
-  text-align: center;
-  font-size: 2em;
-  padding: 20px;
-  width: 250px;
-  min-height: 250px;
-  overflow: auto;
-  text-align: center;
-  background-color: rgb( 175, 177, 165 );
-  border-radius: 10px;
-}
-div.pretty p{
-  font-size: .5em;
-  color: black;
-}
-span.score{
-  display: inline-block;
-  height: 80px;
-  width: 80px;
-  border-radius: 40px;
-  background-color: rgb( 250, 255, 189 );
-  color: #00A2D1;
-  padding-top: 10px;
-}
-span.start{
-  display: block;
-  float: left;
-  border-radius: 5px;
-  padding-right: 20px;
-  padding-left: 20px;
-  background-color: rgb( 250, 255, 189 );
-  color: #00A2D1;
-}
-span.goal{
-  display: block;
-  float: right;
-  border-radius: 5px;
-  padding-right: 20px;
-  padding-left: 20px;
-  background-color: rgb( 250, 255, 189 );
-  color: #00A2D1;
-}
 </style>
 
 <script type='text/javascript'>
@@ -105,8 +50,6 @@ function updateBadge( title, change, result, start, goal ){
 }
 
 $( document ).ready( function(){
-//  updateBadge( 'Dummy Title', 15, 'LOST', '200', '190' );
-
   var dt0 = $( '#table0' ).DataTable({
      'processing':    true
     ,'dom':           '<"toolbar">frtip'
@@ -149,7 +92,7 @@ if( isset( $notifications ) ){
 </div>
 
 <div style='margin-top: 50px;'>
-  <div style='width: 45%; /*height: 200px;*/ float: left; /*border: 1px solid red;*/'>
+  <div style='width: 45%; float: left;'>
     <div id='challenge_shiny' class='pretty hide_me'>
       <div id='challenge_title' class='challenge_title'>&nbsp;</div>
       <span class='score'><span id='weight_change'>&nbsp;</span><p id='weight_result'>&nbsp;</p></span>
@@ -159,7 +102,7 @@ if( isset( $notifications ) ){
       </div>
     </div>
   </div>
-  <div style='width: 45%; height: 200px; float: right; /*border: 1px solid red;*/'>&nbsp;
+  <div style='width: 45%; height: 200px; float: right;'>
     <div id='challenge_list'>
 
       <div class='history_dt' style='width: 50%; float: left'>
