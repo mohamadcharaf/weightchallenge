@@ -57,6 +57,7 @@ require_once( 'common_top.php' );
 
 <div class='signin-form'>
   <form method='post' class='form-signin'>
+    <h2 class='form-signin-heading'>Weight Challenge</h2>
     <h2 class='form-signin-heading'>Sign up</h2>
     <hr />
 <?php
