@@ -53,21 +53,31 @@ INSERT INTO wc__users(user_id, sessionid, user_name, user_email, user_pass, join
 INSERT INTO wc__users(user_id, sessionid, user_name, user_email, user_pass, join_date) VALUES( 2, 'X', 'bogus1', 'bogus1@bogus.org', '$2y$10$1PNKvjHzM2ol5u9b.tbmI.J3.WRaDbz3v/bxR1urQFl4/WYrLj0la', '2016-08-31 12:00:00');
 INSERT INTO wc__users(user_id, sessionid, user_name, user_email, user_pass, join_date) VALUES( 3, 'X', 'bogus2', 'bogus2@bogus.org', '$2y$10$zpc19DIPR1vcpjM44bf7UOSWHGHW5TL7JD09JPTMC0bzjBzBMI79q', '2016-08-31 13:00:00');
 
+DROP TABLE IF EXISTS wc__challenge_participant;
 DROP TABLE IF EXISTS wc__challenges;
 CREATE TABLE wc__challenges
 (
   challenge_id INT(10) NOT NULL AUTO_INCREMENT
  ,fk_created_by INT NOT NULL
  ,challenge_name VARCHAR(255) NOT NULL
- ,start_date DATETIME NOT NULL COMMENT 'date on which the challenge begins'
- ,end_date DATETIME NOT NULL COMMENT 'date on which the challenge ends'
+ ,start_date DATE NOT NULL COMMENT 'date on which the challenge begins'
+ ,end_date DATE NOT NULL COMMENT 'date on which the challenge ends'
  ,challenge_type INT(10) NOT NULL DEFAULT 1 COMMENT '1 = Weight loss, 2 = weight gain'
  ,CONSTRAINT PRIMARY KEY ( challenge_id )
  ,CONSTRAINT FOREIGN KEY (fk_created_by) REFERENCES wc__users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
-INSERT INTO wc__challenges(challenge_id, fk_created_by, challenge_name, start_date, end_date, challenge_type) VALUES( 1, 1, 'First challenge', '2016-01-01 12:00:00', '2016-01-31 12:00:00', 1);
-INSERT INTO wc__challenges(challenge_id, fk_created_by, challenge_name, start_date, end_date, challenge_type) VALUES( 2, 1, 'Second challenge', '2016-02-01 12:00:00', '2016-02-27 12:00:00', 1);
-INSERT INTO wc__challenges(challenge_id, fk_created_by, challenge_name, start_date, end_date, challenge_type) VALUES( 3, 1, 'third challenge', '2016-03-01 12:00:00', '2016-03-31 12:00:00', 1);
+
+
+INSERT INTO wc__challenges(challenge_id, fk_created_by, challenge_name, start_date, end_date, challenge_type)
+VALUES
+ ( 1, 1, 'First challenge',             '2016-01-01', '2016-01-31', 1)
+,( 2, 1, 'Second challenge',            '2016-02-01', '2016-02-27', 1)
+,( 3, 1, 'third challenge',             '2016-03-01', '2016-03-31', 1)
+,( 7, 2, 'Test Challenge',              '2015-01-01', '2015-01-31', 1)
+,( 8, 2, 'Do I self-invite?',           '2016-10-01', '2016-10-31', 1)
+,( 9, 2, 'Manual Active Challenge One', '2016-09-01', '2016-09-30', 1)
+,(10, 2, 'Manual Active Challenge Two', '2016-09-15', '2016-10-15', 1)
+
 
 
 DROP TABLE IF EXISTS wc__challenge_participant;
@@ -75,29 +85,37 @@ CREATE TABLE wc__challenge_participant
 (
   fk_challenge_id INT(10) NOT NULL
  ,fk_user_id INT(10) NOT NULL
- ,start_date DATETIME NOT NULL COMMENT 'copy this data value when challenge is joined'
- ,end_date DATETIME NOT NULL COMMENT 'copy this data value when challenge is joined'
+ ,start_date DATE NOT NULL COMMENT 'copy this data value when challenge is joined'
+ ,end_date DATE NOT NULL COMMENT 'copy this data value when challenge is joined'
  ,challenge_type INT(10) NOT NULL DEFAULT 1 COMMENT 'copy this data value when challenge is joined'
  ,start_weight INT(10) NULL
  ,goal_weight INT(10) NULL
  ,rank INT(10) NULL
  ,team_size INT(10) NULL COMMENT 'update this every time a team member joins'
- ,status VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
+ ,`status` VARCHAR(30) NULL COMMENT 'One of Invited, Accepted, Declined, Participating, Complete, or Disqualified'
 ,CONSTRAINT FOREIGN KEY (fk_challenge_id) REFERENCES wc__challenges(challenge_id)
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
+,CONSTRAINT uc_participant UNIQUE (fk_challenge_id, fk_user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 1, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 2, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 1, 3, '2016-01-01 12:00:00', '2016-01-31 12:00:00', 260, 250, 1, 5 );
-
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 1, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 2, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 2, 3, '2016-02-01 12:00:00', '2016-02-27 12:00:00', 260, 250, 1, 5 );
-
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 1, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 2, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
-INSERT INTO wc__challenge_participant(fk_challenge_id, fk_user_id, start_date, end_date, start_weight, goal_weight, rank, team_size) VALUES( 3, 3, '2016-03-01 12:00:00', '2016-03-31 12:00:00', 260, 250, 1, 5 );
+INSERT INTO wc__challenge_participant(fk_challenge_id,fk_user_id,start_date,end_date,challenge_type,start_weight,goal_weight,rank,team_size,status)
+VALUES
+ (1,1,    '2016-01-01', '2016-01-31', 1,  260,  250,  1,  0,  'Complete')
+,(2,1,    '2016-02-01', '2016-02-27', 1,  260,  250,  1,  0,  'Complete')
+,(3,1,    '2016-03-01', '2016-03-31', 1,  260,  250,  1,  0,  'Complete')
+,(7,1,    '2015-01-01', '2015-01-31', 1,  null, 0,  null, 2,  'Declined')
+,(1,2,    '2016-01-01', '2016-01-31', 1,  260,  250,  1,  0,  'Complete')
+,(2,2,    '2016-02-01', '2016-02-27', 1,  260,  250,  1,  0,  'Complete')
+,(3,2,    '2016-03-01', '2016-03-31', 1,  260,  250,  1,  0,  'Complete')
+,(7,2,    '2015-01-01', '2015-01-31', 1,  null, 0,  null, 2,  'Complete')
+,(8,2,    '2016-10-01', '2016-10-31', 1,  null, 0,  null, 0,  'Invited')
+,(1,3,    '2016-01-01', '2016-01-31', 1,  260,  250,  1,  0,  'Complete')
+,(2,3,    '2016-02-01', '2016-02-27', 1,  260,  250,  1,  0,  'Complete')
+,(3,3,    '2016-03-01', '2016-03-31', 1,  260,  250,  1,  0,  'Complete')
+,(7,3,    '2015-01-01', '2015-01-31', 1,  null, null, null, null, 'Declined')
+,(8,3,    '2016-10-01', '2016-10-31', 1,  null, null, null, null, 'Invited')
+,(9,3,    '2016-09-01', '2016-09-30', 1,  250,  230,  1,  1,  'Participating')
+,(10,3,   '2016-09-15', '2016-10-15', 1,  240,  220,  1,  1,  'Participating');
 
 DROP TABLE IF EXISTS wc__user_weigh_in;
 CREATE TABLE wc__user_weigh_in
