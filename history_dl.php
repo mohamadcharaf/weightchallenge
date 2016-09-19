@@ -37,7 +37,11 @@ if( $action === 'creation' ){
 
   // Get the actual data for display
   $sql_string = '
-     SELECT challenge_id, challenge_name, start_date, end_date, "Weight loss" AS challenge_type
+     SELECT challenge_id
+           ,challenge_name
+           ,DATE_FORMAT( start_date, "%Y-%m-%d" )
+           ,DATEDIFF( end_date, start_date )
+           ,"Weight loss" AS challenge_type
        FROM wc__challenges
       WHERE fk_created_by = :uid
    ORDER BY start_date DESC
@@ -67,8 +71,9 @@ else if( $action === 'participation' ){
   // Get the actual data for display
   $sql_string = '
      SELECT fk_challenge_id
-           ,start_date
-           ,end_date
+           ,(SELECT challenge_name FROM wc__challenges WHERE challenge_id = fk_challenge_id )
+           ,DATE_FORMAT( start_date, "%Y-%m-%d" )
+           ,DATEDIFF( end_date, start_date )
            ,start_weight
            ,goal_weight
            ,rank
@@ -109,7 +114,7 @@ else if( $action === 'active' ){
   $sql_string = '
 SELECT challenge_id
       ,challenge_name
-      ,weight
+      ,IF( weight > start_weight, start_weight - weight, weight - start_weight )
       ,IF( weight > start_weight, "GAINED", "LOST" )
       ,start_weight
       ,goal_weight

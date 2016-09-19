@@ -54,7 +54,7 @@ $( document ).ready( function(){
     ,'language':      { 'emptyTable': 'You have not yet been invited any challenges.' }
     ,'columnDefs':    [{ 'targets': [ 0 ]
                           ,'visible': false }
-                       ,{ 'targets':     [ 1, 2, 3, 4, 5, 6, 7 ]
+                       ,{ 'targets':     [ 1, 2, 3, 4, 5, 6, 7, 8 ]
                          ,'createdCell': function( td, cellData, rowData, row, col ){
                                            $(td).css( { 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ util.post( 'challenge.php', { 'challenge_id': rowData[0] } ); });
                                          }}
@@ -65,20 +65,20 @@ $( document ).ready( function(){
                                           $(td).addClass( 'dt-right' );           // These two ( .css() and .addClass() ) are equivalent
                                         }}
 */
-                       ,{ 'targets':   [ 3, 4, 5, 6 ]
+                       ,{ 'targets':   [ 4, 5, 6, 7 ]
                          ,'className': 'dt-right' } // This way also aligns the column title right
-                       ,{ 'targets':   [ 7, 8, 9 ]
+                       ,{ 'targets':   [ 8, 9, 10 ]
                          ,'className': 'dt-center' }
-                       ,{ 'targets':     [ 8 ]
+                       ,{ 'targets':     [ 9 ]
                          ,'createdCell': function( td, cellData, rowData, row, col ){
-                                           if( rowData[7] == 'Invited' ){
+                                           if( rowData[8] == 'Invited' ){
                                              $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'accepted'); });
                                            }
                                           }
                         }
-                       ,{ 'targets':     [ 9 ]
+                       ,{ 'targets':     [ 10 ]
                          ,'createdCell': function( td, cellData, rowData, row, col ){
-                                           if( rowData[7] == 'Invited' ){
+                                           if( rowData[8] == 'Invited' ){
                                              $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'declined'); });
                                            }
                                          }}
@@ -103,7 +103,7 @@ $( document ).ready( function(){
         <th>challenge_id</th>
         <th>Challenge Name</th>
         <th>Start Date</th>
-        <th>End Date</th>
+        <th>Length</th>
         <th>Challenge Type</th>
       </tr>
     </thead>
@@ -116,8 +116,9 @@ $( document ).ready( function(){
     <thead>
       <tr>
         <th>challenge_id</th>
+        <th>Challenge Name</th>
         <th>Start Date</th>
-        <th>End Date</th>
+        <th>Length</th>
         <th>Start Weight</th>
         <th>Goal Weight</th>
         <th>Rank</th>
