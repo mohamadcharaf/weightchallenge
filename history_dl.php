@@ -107,19 +107,31 @@ else if( $action === 'active' ){
 
   // Get the actual data for display
   $sql_string = '
-     SELECT c.challenge_id
-           ,c.challenge_name
-           ,"99"
-           ,"LOST"
-           ,cp.start_weight
-           ,cp.goal_weight
-       FROM wc__challenge_participant cp
-           ,wc__challenges c
-      WHERE cp.fk_user_id = :uid
-        AND cp.status = "Participating"
-        AND c.challenge_id = cp.fk_challenge_id
-   ORDER BY c.start_date DESC
-   LIMIT :start, :length';
+SELECT challenge_id
+      ,challenge_name
+      ,weight
+      ,IF( weight > start_weight, "GAINED", "LOST" )
+      ,start_weight
+      ,goal_weight
+  FROM (SELECT c.challenge_id
+              ,c.challenge_name
+              ,(SELECT weight
+                 FROM wc__user_weigh_in
+                WHERE fk_user_id = :uid
+                  AND weigh_date = ( SELECT max(weigh_date)
+                                       FROM wc__user_weigh_in
+                                      WHERE fk_user_id = :uid
+                                        AND weight IS NOT null
+                                        AND weigh_date BETWEEN c.start_date AND c.end_date )) AS weight
+              ,cp.start_weight
+              ,cp.goal_weight
+          FROM wc__challenge_participant cp
+              ,wc__challenges c
+         WHERE cp.fk_user_id = :uid
+           AND cp.status = "Participating"
+           AND c.challenge_id = cp.fk_challenge_id
+      ORDER BY c.start_date DESC
+      LIMIT :start, :length ) box';
 
   $stmt = $pdo->prepare( $sql_string );
   $stmt->bindParam( ':uid', $uid );
