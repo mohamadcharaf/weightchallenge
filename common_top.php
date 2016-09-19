@@ -99,7 +99,7 @@ function addNotification( $uid, $data, $msgType ){
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/bootstrap-table.css' />
   <link rel='stylesheet' type='text/css' media='screen' href='bootstrap/css/styles.css' />
 </head>
-<body background="./img/background.jpg">
+<body>
 <?php
 if( $user->is_loggedin() ){
 ?>

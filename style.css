@@ -2,7 +2,9 @@
 /* CSS Document */
 
 body{
-	background:#f1f9f9;
+    background-image: url( 'images/background.jpg' ) !important;
+/*  background:#f1f9f9; */
+    background-color: #cccccc;
 }
 
 .form-signin {
