@@ -103,46 +103,174 @@ DROP TABLE IF EXISTS wc__user_weigh_in;
 CREATE TABLE wc__user_weigh_in
 (
   fk_user_id INT(10) NOT NULL
- ,weigh_date DATETIME NOT NULL
+ ,weigh_date DATE NOT NULL
  ,weight INT(10) NULL
 ,CONSTRAINT FOREIGN KEY (fk_user_id) REFERENCES wc__users(user_id)
+,CONSTRAINT uc_weigh_in UNIQUE (fk_user_id, weigh_date)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-01 08:50:00', 250 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-02 09:00:00', 249 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-03 08:40:00', 248 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-04 09:01:00', 247 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-01', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-02', 249 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-03', 248 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-04', 247 );
 
 -- Jan 5 will show as MISSING! (to be repaired by user viewing of data) (add a NULL for this date)
---INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-05 08:30:00', 246 );
+--INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-05', 246 );
 
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-06 14:32:00', 246 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-07 08:50:00', 247 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-08 09:20:00', 247 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-09 08:30:00', 245 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-10 09:05:00', 246 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-11 08:40:00', 248 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-12 09:00:00', 246 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-13 08:00:00', 245 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-14 09:00:00', 244 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-15 09:00:00', 243 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-16 09:00:00', 243 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-17 08:00:00', 244 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-18 08:00:00', 243 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-19 09:00:00', 242 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-20 08:00:00', 242 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-21 09:00:00', 241 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-06', 246 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-07', 247 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-08', 247 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-09', 245 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-10', 246 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-11', 248 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-12', 246 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-13', 245 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-14', 244 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-15', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-16', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-17', 244 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-18', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-19', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-20', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-21', 241 );
 -- Jan 22, 23, & 24 will show as MISSING! (to be repaired by user viewing of data) (add a NULL for this date)
---INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-22 08:00:00', 243 );
---INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-23 09:00:00', 244 );
---INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-24 08:00:00', 243 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-25 09:00:00', 242 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-26 09:00:00', 242 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-27 08:00:00', 243 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-28 08:00:00', 242 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-29 08:00:00', 241 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-30 09:00:00', 241 );
-INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-31 09:00:00', 241 );
+--INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-22', 243 );
+--INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-23', 244 );
+--INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-24', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-25', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-26', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-27', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-28', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-29', 241 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-30', 241 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-01-31', 241 );
+
+
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-01', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-02', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-03', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-04', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-05', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-06', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-07', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-08', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-09', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-10', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-11', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-12', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-13', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-14', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-15', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-16', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-17', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-18', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-19', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-20', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-21', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-22', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-23', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-24', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-25', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-26', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-27', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-28', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-29', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-09-30', 250 );
+
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-01', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-02', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-03', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-04', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-05', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-06', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-07', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-08', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-09', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-10', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-11', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-12', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-13', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-14', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-15', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-16', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-17', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-18', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-19', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-20', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-21', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-22', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-23', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-24', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-25', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-26', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-27', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-28', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-29', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-30', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 1, '2016-10-31', 250 );
+
+
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-01', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-02', 250 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-03', 249 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-04', 249 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-05', 248 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-06', 248 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-07', 247 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-08', 247 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-09', 246 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-10', 246 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-11', 245 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-12', 245 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-13', 244 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-14', 244 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-15', 243 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-16', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-17', 242 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-18', 241 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-19', 241 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-20', 240 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-21', 240 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-22', 240 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-23', 239 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-24', 239 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-25', 238 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-26', 238 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-27', 237 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-28', 237 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-29', 236 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-09-30', 236 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-01', 235 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-02', 235 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-03', 234 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-04', 234 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-05', 233 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-06', 233 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-07', 232 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-08', 232 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-09', 231 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-10', 231 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-11', 230 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-12', 230 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-13', 230 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-14', 229 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-15', 229 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-16', 228 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-17', 228 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-18', 227 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-19', 227 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-20', 226 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-21', 226 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-22', 225 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-23', 225 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-24', 224 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-25', 224 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-26', 223 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-27', 223 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-28', 222 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-29', 222 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-30', 221 );
+INSERT INTO wc__user_weigh_in( fk_user_id, weigh_date, weight ) VALUES( 3, '2016-10-31', 221 );
 
   INSERT INTO wc__notifications( fk_user_id, msg_id, msg_text, added_on )
   VALUES ( :uid, :msg_type, :msg_text, now() )';
