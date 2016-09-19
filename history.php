@@ -72,14 +72,29 @@ $( document ).ready( function(){
                        ,{ 'targets':     [ 9 ]
                          ,'createdCell': function( td, cellData, rowData, row, col ){
                                            if( rowData[8] == 'Invited' ){
-                                             $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'accepted'); });
+                                             $(td).css( { 'color': 'green', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){
+                                                $.ajax({
+                                                  url:      'history_dl.php?action=accept&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>&challenge_id=' + rowData[0]
+                                                  ,context: document.body
+                                                }).done(function() {
+                                                dt1.draw();
+                                                });
+                                             });
                                            }
                                           }
                         }
                        ,{ 'targets':     [ 10 ]
                          ,'createdCell': function( td, cellData, rowData, row, col ){
                                            if( rowData[8] == 'Invited' ){
-                                             $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){ alert( 'declined'); });
+                                             $(td).css( { 'color': 'red', 'cursor': 'pointer' } ).unbind( 'click' ).click( function(){
+                                                $.ajax({
+                                                  url:      'history_dl.php?action=decline&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>&challenge_id=' + rowData[0]
+                                                  ,context: document.body
+                                                }).done(function() {
+                                                dt1.draw();
+                                                });
+
+                                             });
                                            }
                                          }}
                       ]

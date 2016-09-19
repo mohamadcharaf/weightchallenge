@@ -99,9 +99,9 @@ else if( $action === 'active' ){
   // Get total count
   $sql_string = '
   SELECT COUNT(*)
-    FROM wc__challenge_participant
-   WHERE fk_user_id = :uid
-     AND status = "Participating"';
+    FROM wc__challenge_participant cp
+   WHERE cp.fk_user_id = :uid
+     AND cp.status = "Participating"';
   $stmt = $pdo->prepare( $sql_string );
   $stmt->bindParam( ':uid', $uid );
   $stmt->execute();
@@ -142,6 +142,42 @@ SELECT challenge_id
   $stmt->bindParam( ':uid', $uid );
   $stmt->bindParam( ':start', $start, PDO::PARAM_INT );   // Paging support
   $stmt->bindParam( ':length', $length, PDO::PARAM_INT ); // Paging supportelse
+}
+else if( $action === 'accept' ){
+  $challenge_id = (int) ( (isset($_REQUEST['challenge_id'])) ? htmlspecialchars($_REQUEST['challenge_id']) : null );
+
+  if( $challenge_id !== null ){
+    $sql_string = '
+UPDATE wc__challenge_participant cp
+   SET cp.status = "Accepted"
+ WHERE cp.fk_user_id = :uid
+   AND cp.fk_challenge_id = :cid
+   AND cp.status = "Invited"';
+    $stmt = $pdo->prepare( $sql_string );
+    $stmt->bindParam( ':uid', $uid );
+    $stmt->bindParam( ':cid', $challenge_id );
+
+    $stmt->execute();
+  }
+  return;
+}
+else if( $action === 'decline' ){
+  $challenge_id = (int) ( (isset($_REQUEST['challenge_id'])) ? htmlspecialchars($_REQUEST['challenge_id']) : null );
+
+  if( $challenge_id !== null ){
+    $sql_string = '
+UPDATE wc__challenge_participant cp
+   SET cp.status = "Declined"
+ WHERE cp.fk_user_id = :uid
+   AND cp.fk_challenge_id = :cid
+   AND cp.status = "Invited"';
+    $stmt = $pdo->prepare( $sql_string );
+    $stmt->bindParam( ':uid', $uid );
+    $stmt->bindParam( ':cid', $challenge_id );
+
+    $stmt->execute();
+  }
+  return;
 }
 else{
   // Bad value for $action.  Ignore request.
