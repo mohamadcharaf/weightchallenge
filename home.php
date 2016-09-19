@@ -50,6 +50,8 @@ function updateBadge( title, change, result, start, goal ){
 }
 
 $( document ).ready( function(){
+  $( 'body' ).addClass( 'subdued' );
+
   var dt0 = $( '#table0' ).DataTable({
      'processing':    true
     ,'dom':           '<"toolbar">frtip'

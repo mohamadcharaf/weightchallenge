@@ -54,7 +54,6 @@ if( isset( $_POST['btn-signup'] ) ){
 }
 require_once( 'common_top.php' );
 ?>
-
 <div class='signin-form'>
   <form method='post' class='form-signin'>
     <h2 class='form-signin-heading'>Weight Challenge</h2>
@@ -65,7 +64,7 @@ if( isset( $error ) ){
   foreach( $error as $error ){
 ?>
     <div class='alert alert-danger'>
-      <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?> !
+      <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?>
     </div>
 <?php
   }

@@ -30,7 +30,7 @@ require_once( 'common_top.php' );
 if( isset( $error ) ){
 ?>
     <div class='alert alert-danger'>
-      <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?> !
+      <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?>
     </div>
 <?php
 }

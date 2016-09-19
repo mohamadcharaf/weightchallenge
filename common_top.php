@@ -232,6 +232,8 @@ $stmt->execute();
 
 <script type='text/javascript'>
 $( document ).ready( function(){
+  $( 'body' ).addClass( 'subdued' );
+
   $( '#notification_ticker' ).webTicker({
       speed:         50       // pixels per second
       ,direction:    'left'   // if to move left or right
@@ -254,7 +256,11 @@ $( document ).ready( function(){
 else{
 // Logged out view
 ?>
-
+<script type='text/javascript'>
+$( document ).ready( function(){
+  $( 'body' ).addClass( 'bold' );
+});
+</script>
 <?php
 }
 ?>
