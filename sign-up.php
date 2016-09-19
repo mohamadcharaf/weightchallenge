@@ -59,7 +59,7 @@ require_once( 'common_top.php' );
   <form method='post' class='form-signin'>
     <h2 class='form-signin-heading'>Weight Challenge</h2>
     <h2 class='form-signin-heading'>Sign up</h2>
-    <hr />
+    <hr>
 <?php
 if( isset( $error ) ){
   foreach( $error as $error ){

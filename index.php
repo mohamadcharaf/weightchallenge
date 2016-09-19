@@ -25,7 +25,7 @@ require_once( 'common_top.php' );
   <form class='form-signin' method='post' id='login-form'>
     <h2 class='form-signin-heading'>Weight Challenge</h2>
     <h2 class='form-signin-heading'>Log In</h2>
-    <hr />
+    <hr>
 <?php
 if( isset( $error ) ){
 ?>
