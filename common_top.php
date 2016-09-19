@@ -234,15 +234,15 @@ $stmt->execute();
 $( document ).ready( function(){
   $( 'body' ).addClass( 'subdued' );
 
-  $( '#notification_ticker' ).webTicker({
-      speed:         50       // pixels per second
-      ,direction:    'left'   // if to move left or right
-      ,moving:       true     // weather to start the ticker in a moving or static position
-      ,startEmpty:   true     // weather to start with an empty or pre-filled ticker
-      ,duplicate:    false    // if there is less items then visible on the ticker you can duplicate the items to make it continuous
-      ,rssurl:       false    // only set if you want to get data from rss
-      ,rssfrequency: 0        // the frequency of updates in minutes. 0 means do not refresh
-      ,updatetype:   'reset'  // how the update would occur options are "reset" or "swap"
+  wc_ticker = $( '#notification_ticker' ).webTicker({
+     speed:        1       // pixels per second
+    ,direction:    'left'   // if to move left or right
+    ,moving:       false     // weather to start the ticker in a moving or static position
+    ,startEmpty:   false     // weather to start with an empty or pre-filled ticker
+    ,duplicate:    false    // if there is less items then visible on the ticker you can duplicate the items to make it continuous
+    ,rssurl:       false    // only set if you want to get data from rss
+    ,rssfrequency: 0        // the frequency of updates in minutes. 0 means do not refresh
+    ,updatetype:   'reset'  // how the update would occur options are "reset" or "swap"
   });
 
   $( '#notification_area' ).unbind( 'click' ).click( function(){
