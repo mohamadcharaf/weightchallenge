@@ -5,10 +5,10 @@ body{
   background:#f1f9f9;
 }
 .bold{
-    background-image: url( 'images/background.jpg' ) !important;
+    background-image: url( 'images/backgroundl2r.jpg' ) !important;
 }
 .subdued{
-    background-image: url( 'images/background_sub.jpg' ) !important;
+    background-image: url( 'images/background_subl2r.jpg' ) !important;
 }
 
 .form-signin {
