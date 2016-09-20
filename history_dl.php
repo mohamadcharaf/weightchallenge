@@ -179,6 +179,33 @@ UPDATE wc__challenge_participant cp
   }
   return;
 }
+else if( $action === 'invited' ){
+  $challenge_id = (int) ( (isset($_REQUEST['challenge_id'])) ? htmlspecialchars($_REQUEST['challenge_id']) : null );
+
+  // Get total count
+  $sql_string = '
+SELECT COUNT(*)
+  FROM wc__challenge_participant
+ WHERE fk_challenge_id = :cid';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':cid', $challenge_id );
+  $stmt->execute();
+
+  $totalCount = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
+
+  // Get filtered count
+  $filterCount = $totalCount;
+
+  // Get the actual data for display
+  $sql_string = '
+SELECT user_name, user_email
+  FROM wc__users
+ WHERE user_id IN ( SELECT fk_user_id
+                      FROM wc__challenge_participant
+                     WHERE fk_challenge_id = :cid )';
+  $stmt = $pdo->prepare( $sql_string );
+  $stmt->bindParam( ':cid', $challenge_id );
+}
 else{
   // Bad value for $action.  Ignore request.
   return;

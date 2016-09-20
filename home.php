@@ -50,8 +50,6 @@ function updateBadge( title, change, result, start, goal ){
 }
 
 $( document ).ready( function(){
-  $( 'body' ).addClass( 'subdued' );
-
   var dt0 = $( '#table0' ).DataTable({
      'processing':    true
     ,'dom':           '<"toolbar">frtip'
@@ -106,7 +104,6 @@ if( isset( $notifications ) ){
   </div>
   <div style='width: 45%; height: 200px; float: right;'>
     <div id='challenge_list'>
-
       <div class='history_dt' style='width: 50%; float: left'>
         Challenges in which you're participing (click to see progress)
         <table id='table0' class='display' cellspacing='0' width='100%' >

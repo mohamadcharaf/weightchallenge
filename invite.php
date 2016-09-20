@@ -25,7 +25,6 @@ if( isset( $_POST['btn-invite'] ) ){
       $stmt->execute();
 
 // QQQ Hmm, this needs to be a unique key to prevent double inserts.
-// QQQ And it seems to be inserting two anyway.
       $row = $stmt->fetch( PDO::FETCH_ASSOC );
       $invitee_id = $row[ 'user_id' ];
       $sql_string = '
@@ -54,8 +53,6 @@ if( isset( $_POST['btn-invite'] ) ){
       // Look for the no rows found error and suggest they invite thier friend to sign up for the program
       $error[] = "An error prevented you from inviting that person.  Perhaps they are not yet participating.  Please invite them to join by clicking <a href='mailto:{$email}?Subject=You have been invited to join Weightloss Challenge!&body=Visit http://link_here to join'>HERE</a>";
     }
-
-
   }
 }
 
@@ -67,51 +64,61 @@ $stmt = $user->prepQuery( $sql_string );
 $stmt->bindParam( ':cid', $challenge_id );
 $stmt->execute();
 $challengeName = $stmt->fetch( PDO::FETCH_COLUMN, 0 );
-
-$sql_string =  '
-SELECT user_name, user_email
-  FROM wc__users
- WHERE user_id IN ( SELECT fk_user_id
-                      FROM wc__challenge_participant
-                     WHERE fk_challenge_id = :cid )';
-$stmt = $user->prepQuery( $sql_string );
-$stmt->bindParam( ':cid', $challenge_id );
-$stmt->execute();
-$participants = $stmt->fetchAll( PDO::FETCH_NUM );
 ?>
 
-<style type='text/css'>
-table.participants td, table.participants th{
-  padding: 1px 10px;
-}
-</style>
+<script type='text/javascript'>
+$( document ).ready( function(){
+  var dt0 = $( '#table0' ).DataTable({
+     'processing':    true
+    ,'dom':           '<"toolbar">frtip'
+    ,'serverSide':    true
+    ,'ajax':          'history_dl.php?action=invited&user=<?php echo $user->getName() ?>&session=<?php echo $user->getSession() ?>&challenge_id=<?php echo $challenge_id ?>'
+    ,'displayLength': 25
+    ,'info':          true
+    ,'searching':     false
+    ,'ordering':      false
+    ,'scrollY':       '200px'
+    ,'paging':        true
+    ,'language':      { 'emptyTable': 'You have not yet invited any participants.' }
+    ,'columnDefs':    [{ 'targets': [ 1 ]
+                        ,'visible': false }
+                      ,{ 'targets': [ 0 ]
+                         ,'createdCell': function( td, cellData, rowData, row, col ){
+                                           $(td).css( { 'cursor': 'pointer' } );
+                                         }
+                         ,'render':      function( data, type, full, meta ){
+                                            return '<a href="mailto:' + full[1] + '?Subject=You have been invited to a challenge!&body=Click here to join (NEED embedded URL)" target="_blank">' + data + '</a>';
+                                         }}
+                      ]
+  });
+});
+</script>
 
-For <?php echo $challengeName; ?> there are <?php echo count( $participants ); ?> participants
-<?php
-$playerNum = 0;
-if( isset( $participants ) ){
-  echo '<table class="participants" style="width: 45%;">';
-    echo "<tr><th style='width: 5%;'>Participant</th><th style='width: 95%;'>Name</th></tr>";
-  foreach( $participants as $person ){
-    $playerNum++;
-    echo "<tr><td style='text-align: right;'>{$playerNum}</td><td><a href='mailto:{$person[1]}?Subject=You have been invited to a challenge!&body=Click here to join (NEED embedded URL)' title='Click here to open your email client to send an invitation'>{$person[0]}</a></td></tr>";
-  }
-  echo '</table>';
-}
-?>
+<h2>Manage Challenge: <?php echo $challengeName; ?></h2>
 
-
-<div class='signin-form'>
-  <form method='post' class='form-signin'>
-    <h2 class='form-signin-heading'>Invite friends to participate</h2>
-    <hr />
+<div style='margin-top: 50px;'>
+  <div style='width: 45%; float: left;'>
+    <table id='table0' class='display' cellspacing='0' width='100%' >
+      <thead>
+        <tr>
+          <th>Click person to send invitation email</th>
+          <th>email</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div style='width: 45%; height: 200px; float: right;'>
+    <div class='signin-form' style='margin-top: 0px;'>
+      <form method='post' class='form-signin'>
+        <h2 class='form-signin-heading'>Invite friends to participate</h2>
+        <hr>
 <?php
 if( isset( $error ) ){
   foreach( $error as $error ){
 ?>
-    <div class='alert alert-danger'>
-      <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?> !
-    </div>
+        <div class='alert alert-danger'>
+          <i class='glyphicon glyphicon-warning-sign'></i> &nbsp; <?php echo $error; ?> !
+        </div>
 <?php
   }
 }
@@ -124,18 +131,18 @@ if( isset( $error ) ){
 <?php
 //}
 ?>
-
-
-    <div class='form-group'>
-      <input type='text' class='form-control' name='txt_email' placeholder='Enter E-Mail address' value='<?php if(isset($error)){echo $email;}?>' />
+        <div class='form-group'>
+          <input type='text' class='form-control' name='txt_email' placeholder='Enter E-Mail address' value='<?php if(isset($error)){echo $email;}?>' />
+        </div>
+        <div class='form-group'>
+          <input type='hidden' name='challenge_id' value='<?php echo $challenge_id;?>'>
+          <button type='submit' name='btn-invite' class='btn btn-primary' id='invite_challenge'>
+            <i class='glyphicon glyphicon-check'></i>&nbsp;INVITE
+          </button>
+        </div>
+      </form>
     </div>
-    <div class='form-group'>
-      <input type='hidden' name='challenge_id' value='<?php echo $challenge_id;?>'>
-      <button type='submit' name='btn-invite' class='btn btn-primary' id='invite_challenge'>
-        <i class='glyphicon glyphicon-check'></i>&nbsp;INVITE
-      </button>
-    </div>
-  </form>
+  </div>
 </div>
 
 
